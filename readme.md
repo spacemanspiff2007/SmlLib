@@ -21,15 +21,15 @@ from smllib import SmlStreamReader
 
 stream = SmlStreamReader()
 stream.add(b'BytesFromSerialPort')
-sml_msgs = stream.get_msg()
-if sml_msgs is None:
+sml_frame = stream.get_frame()
+if sml_frame is None:
     print('Bytes missing')
 
 # Shortcut to extract all values without parsing the whole frame
-obis_values = sml_msgs.get_obis()
+obis_values = sml_frame.get_obis()
 
 # return all values but slower
-parsed_msgs = sml_msgs.parse_frame()
+parsed_msgs = sml_frame.parse_frame()
 for msg in parsed_msgs:
     # prints a nice overview over the received values
     print(msg.format_msg())

@@ -28,7 +28,7 @@ class SmlStreamReader:
     def clear(self):
         self.bytes = b''
 
-    def get_msg(self) -> Optional[SmlFrame]:
+    def get_frame(self) -> Optional[SmlFrame]:
         start = self.bytes.find(b'\x1B\x1B\x1B\x1B\x01\x01\x01\x01')
         if start == -1:
             return None

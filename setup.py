@@ -6,7 +6,7 @@ import setuptools  # type: ignore
 
 def load_version() -> str:
     version: typing.Dict[str, str] = {}
-    with open("smllib/__version__.py") as fp:
+    with open("src/smllib/__version__.py") as fp:
         exec(fp.read(), version)
     assert version['__version__'], version
     return version['__version__']
@@ -42,7 +42,8 @@ setuptools.setup(
     project_urls={
         'GitHub': "https://github.com/spacemanspiff2007/SmlLib",
     },
-    packages=setuptools.find_packages(exclude=['tests*']),
+    packages=setuptools.find_packages(where='src', exclude=['tests*']),
+    package_dir={'': 'src'},
     classifiers=[
         "Development Status :: 4 - Beta",
         "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
