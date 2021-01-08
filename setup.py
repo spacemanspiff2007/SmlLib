@@ -42,7 +42,7 @@ setuptools.setup(
     project_urls={
         'GitHub': "https://github.com/spacemanspiff2007/SmlLib",
     },
-    packages=setuptools.find_packages(include=['smllib'], exclude=['tests*']),
+    packages=setuptools.find_packages(exclude=['tests*']),
     classifiers=[
         "Development Status :: 4 - Beta",
         "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",

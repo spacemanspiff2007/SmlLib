@@ -12,7 +12,7 @@ This library can be used to parse SML byte streams.
 It does not read from external devices.
 
 ## Usage
-The [Sml2Mqtt](https://pypi.org/project/Sml2Mqtt/) program makes use of this library.
+The [sml2mqtt](https://pypi.org/project/sml2mqtt/) program makes use of this library.
 
 
 Example:
