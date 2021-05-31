@@ -14,6 +14,9 @@ def test_get_int():
     f = SmlFrame(b'\x52\xff')
     assert f.get_value(0) == -1
 
+    f = SmlFrame(b'\x52\x03')
+    assert f.get_value(0) == 3
+
     f = SmlFrame(b'\x62\x1e')
     assert f.get_value(0) == 30
 
@@ -132,8 +135,8 @@ def test_bool():
     assert f.get_value(0) is False
 
 
-def test_long():
-    f = SmlFrame(a2b_hex('8302010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010102FF'))  # noqa: E501
-    assert f.get_value(0) == '010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010102'      # noqa: E501
+def test_long_str():
+    f = SmlFrame(a2b_hex('8302010203040101010101010101010101010101010101010101010101010101010101010101010101010101010101010102FF'))  # noqa: E501
+    assert f.get_value(0) == '010203040101010101010101010101010101010101010101010101010101010101010101010101010101010101010102'    # noqa: E501
     assert f.next_pos == 50
     assert f.buffer[50] == 0xFF

@@ -53,7 +53,7 @@ class SmlFrame:
 
         # type is a list
         if _type == 0x70:
-            self.next_pos = pos + 1
+            self.next_pos = s_pos + 1   # Must be s_pos because we can have lists with a long length
             return [None for i in range(_size)]
 
         # End position

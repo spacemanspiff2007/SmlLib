@@ -2,7 +2,7 @@
 [![Tests Status](https://github.com/spacemanspiff2007/SmlLib/workflows/Tests/badge.svg)](https://github.com/spacemanspiff2007/SmlLib/actions?query=workflow%3ATests)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/SmlLib)](https://pypi.org/project/smllib/)
 [![PyPI](https://img.shields.io/pypi/v/SmlLib)](https://pypi.org/project/smllib/)
-[![Downloads](https://pepy.tech/badge/SmlLib/month)](https://pepy.tech/project/SmlLib/month)
+[![Downloads](https://pepy.tech/badge/SmlLib)](https://pepy.tech/project/SmlLib/month)
 
 
 _A SML (Smart Message Language) library_
