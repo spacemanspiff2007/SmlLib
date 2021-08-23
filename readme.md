@@ -8,7 +8,7 @@
 _A SML (Smart Message Language) library_
 
 ## About
-This library can be used to parse SML byte streams.  
+This library can be used to parse SML byte streams.
 It does not read from external devices.
 
 ## Usage

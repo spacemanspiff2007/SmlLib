@@ -72,7 +72,7 @@ class SmlFrame:
         if _type == 0x00:
             return self.buffer[s_pos + 1:e_pos].hex()
 
-        raise ValueError('Unknown data type!')
+        raise ValueError(f'Unknown data type: {_type:02x}!')
 
     def parse_frame(self) -> List[SmlMessage]:
         ret = []

@@ -126,7 +126,7 @@ class SmlOpenResponse(SmlMsgBase):
     client_id: Optional[str]
     req_file_id: str
     server_id: str
-    ref_time: Optional[str]
+    ref_time: Optional[SmlTime]
     sml_version: Optional[int]
 
 
