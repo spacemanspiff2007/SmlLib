@@ -26,7 +26,7 @@ from smllib.reader import SmlStreamReader
             b'162085200630138017707010051071aff01016208520063011101770701000e0700ff0101622c52ff6301f40177070100000200'
             b'000101010109312e30322e3030370177070100605a02010101010105413031410177070100600500ff0101010165001c8104010'
             b'10163fc1e00760400000362006200726500000201710163e8230000001b1b1b1b1a0222ed',
-            id='Frame1'
+            id='Frame2'
         ),
     )
 )
@@ -43,3 +43,6 @@ def test_frames(frame):
 
     obis_values = frame.get_obis()
     assert len(obis_values) >= 4, obis_values
+
+    for obis in obis_values:
+        obis.get_value()

@@ -4,7 +4,7 @@ from smllib.sml_fields import SmlListEntry
 from smllib.sml_frame import SmlFrame
 
 
-def test_sml_fileds():
+def test_sml_fields():
     f = SmlFrame(a2b_hex('77078181c78203ff010101010449534b0177070100000009ff010101010b'))
     val_list = f.get_value(0)
     for i, _ in enumerate(val_list):
@@ -25,3 +25,20 @@ def test_sml_fileds():
     assert o.scaler == -1
     assert o.value == 17965876
     assert o.get_value() == 1796587.6
+
+
+def test_val_time():
+    # Frame where time is None
+    f = SmlFrame(a2b_hex('77070100600100ff010101010b0a01484c5902000424a001'))
+    val_list = f.get_value(0)
+    f._parse_msg(val_list)
+    o = SmlListEntry.from_list(val_list)
+    assert o.val_time is None
+
+    # Frame where secIndex == 1 and time == 0
+    # -> 7262016200
+    f = SmlFrame(a2b_hex('77070100600100ff017262016200620052000b0a01445a47000282c0b001'))
+    val_list = f.get_value(0)
+    f._parse_msg(val_list)
+    o = SmlListEntry.from_list(val_list)
+    assert o.val_time == 0

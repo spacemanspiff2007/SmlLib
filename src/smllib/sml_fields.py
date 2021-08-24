@@ -145,6 +145,10 @@ class SmlListEntry:
         if _in[5] is None:
             raise ValueError('value is required!')
 
+        # Convert Time
+        if _in[2] is not None:
+            _in[2] = SmlTime.from_list(_in[2])
+
         # Maybe it's ascii so we try to decode it
         if isinstance(_in[5], str):
             v = a2b_hex(_in[5]).decode(errors='ignore')
@@ -153,11 +157,12 @@ class SmlListEntry:
 
         return cls(*_in)
 
-    def __init__(self, obis: str, status: Optional[int], val_time, unit: Optional[int], scaler: Optional[int] = None,
-                 value: Union[None, str, int, float] = None, value_signature: Optional[str] = None):
+    def __init__(self, obis: str, status: Optional[int], val_time: SmlTime.HINT, unit: Optional[int],
+                 scaler: Optional[int] = None, value: Union[None, str, int, float] = None,
+                 value_signature: Optional[str] = None):
         self.obis = obis
         self.status: Optional[int] = status
-        self.val_time = val_time
+        self.val_time: SmlTime.HINT = val_time
         self.unit: Optional[int] = unit
         self.scaler: Optional[int] = scaler
         self.value = value
@@ -191,8 +196,9 @@ class SmlListEntry:
             r += f'{INDENT*indent}-> {summary:s}\n'
         return r
 
-    def get_value(self) -> float:
-        if self.scaler is None:
+    def get_value(self) -> Union[float, str]:
+        # Some devices report the texts with scaler 0
+        if self.scaler is None or isinstance(self.value, str):
             return self.value
 
         return round(self.value * 10**self.scaler, abs(self.scaler) + 3)
