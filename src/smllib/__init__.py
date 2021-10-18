@@ -1,4 +1,9 @@
-from smllib.__version__ import __version__   # noqa: F401
+from smllib import errors
+from smllib.__version__ import __version__
 
-from smllib.sml_frame import SmlFrame                # noqa: F401
-from smllib.reader import SmlStreamReader, CrcError  # noqa: F401
+# isort: split
+
+import smllib.reader
+import smllib.sml
+from smllib.reader import SmlStreamReader
+from smllib.sml_frame import SmlFrame

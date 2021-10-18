@@ -2,7 +2,7 @@ from binascii import a2b_hex
 
 import pytest
 
-from smllib.reader import SmlStreamReader
+from smllib.reader import SmlFrame, SmlStreamReader
 
 
 @pytest.mark.parametrize(
@@ -38,11 +38,39 @@ def test_frames(frame):
     frame = reader.get_frame()
     assert frame is not None
 
-    sml_messages = frame.parse_frame()
-    assert len(sml_messages) >= 3, sml_messages
+    # ensure that parsing always works
+    for _ in range(3):
+        sml_messages = frame.parse_frame()
+        assert len(sml_messages) >= 3, sml_messages
 
-    obis_values = frame.get_obis()
-    assert len(obis_values) >= 4, obis_values
+        obis_values = frame.get_obis()
+        assert len(obis_values) >= 4, obis_values
 
-    for obis in obis_values:
-        obis.get_value()
+        for obis in obis_values:
+            obis.get_value()
+
+
+def test_frame_only():
+    data = b'7607000e1ef6d82a620062007263010176010107000e10e4480e0b060606060104c56c97db0101635584007607000e1ef6d82b62' \
+           b'0062007263070177010b060606060104c56c97db070100620affff7262016510e460887a77078181c78203ff0101010104454d48' \
+           b'0177070100000009ff010101010b060606060104c56c97db0177070100010800ff640101a201621e52ff56000706507d01770701' \
+           b'00020800ff640101a201621e52ff5600136473340177070100010801ff0101621e52ff56000706507d0177070100020801ff0101' \
+           b'621e52ff5600136473340177070100010802ff0101621e52ff5600000000000177070100020802ff0101621e52ff560000000000' \
+           b'0177070100100700ff0101621b52ff55fffff9140177078181c78205ff017262016510e46088010183026b6b6b6bb6b66b6b6b6b' \
+           b'09910a958432f7c76ef11e1ba5d13d047051d5b189e1263e62d73058e3f03e219b24804ecac4010101632538007607000e1ef6d8' \
+           b'2e62006200726302017101639eda00'
+
+    f = SmlFrame(a2b_hex(data))
+
+    parsed_msgs = f.parse_frame()
+    for msg in parsed_msgs:
+        # prints a nice overview over the received values
+        print(msg.format_msg())
+
+    obis_values = f.get_obis()
+    print(obis_values)
+
+    parsed_msgs = f.parse_frame()
+    for msg in parsed_msgs:
+        # prints a nice overview over the received values
+        print(msg.format_msg())

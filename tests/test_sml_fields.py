@@ -1,6 +1,6 @@
 from binascii import a2b_hex
 
-from smllib.sml_fields import SmlListEntry
+from smllib.builder import create_context, SmlListEntryBuilder
 from smllib.sml_frame import SmlFrame
 
 
@@ -9,7 +9,7 @@ def test_sml_fields():
     val_list = f.get_value(0)
     for i, _ in enumerate(val_list):
         val_list[i] = f.get_value()
-    o = SmlListEntry.from_list(val_list)
+    o = SmlListEntryBuilder().build(val_list, create_context())
     assert o.obis == '8181c78203ff'
     assert o.value == 'ISK'
 
@@ -17,7 +17,7 @@ def test_sml_fields():
     val_list = f.get_value(0)
     for i, _ in enumerate(val_list):
         val_list[i] = f.get_value()
-    o = SmlListEntry.from_list(val_list)
+    o = SmlListEntryBuilder().build(val_list, create_context())
 
     assert o.obis == '0100010800ff'
     assert o.status == 386
@@ -32,7 +32,7 @@ def test_val_time():
     f = SmlFrame(a2b_hex('77070100600100ff010101010b0a01484c5902000424a001'))
     val_list = f.get_value(0)
     f._parse_msg(val_list)
-    o = SmlListEntry.from_list(val_list)
+    o = SmlListEntryBuilder().build(val_list, create_context())
     assert o.val_time is None
 
     # Frame where secIndex == 1 and time == 0
@@ -40,5 +40,5 @@ def test_val_time():
     f = SmlFrame(a2b_hex('77070100600100ff017262016200620052000b0a01445a47000282c0b001'))
     val_list = f.get_value(0)
     f._parse_msg(val_list)
-    o = SmlListEntry.from_list(val_list)
+    o = SmlListEntryBuilder().build(val_list, create_context())
     assert o.val_time == 0

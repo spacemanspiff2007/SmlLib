@@ -1,24 +1,17 @@
 from typing import Optional
 
-from .crc import get_crc
-from .sml_frame import SmlFrame
-
-
-class CrcError(Exception):
-    def __init__(self, msg: bytes, crc_msg: int, crc_calc: int):
-        self.msg = msg
-        self.crc_msg = crc_msg
-        self.crc_calc = crc_calc
-
-    def __repr__(self):
-        return f'<{self.__class__.__name__} msg: {self.crc_msg:04x} calc: {self.crc_calc:04x}>'
+from smllib.builder import create_context, CTX_HINT
+from smllib.crc import get_crc
+from smllib.errors import CrcError
+from smllib.sml_frame import SmlFrame
 
 
 class SmlStreamReader:
     MAX_SIZE = 50 * 1024
 
-    def __init__(self):
+    def __init__(self, build_ctx: CTX_HINT = None):
         self.bytes: bytes = b''
+        self.build_ctx: CTX_HINT = build_ctx if build_ctx is not None else create_context()
 
     def add(self, _bytes: bytes):
         self.bytes += _bytes
@@ -64,4 +57,5 @@ class SmlStreamReader:
         if crc_msg != crc_calc:
             raise CrcError(msg, crc_msg, crc_calc)
 
-        return SmlFrame(msg[8: -1 * (8 + padding)].replace(b'\x1B\x1B\x1B\x1B\x1B\x1B\x1B\x1B', b'\x1B\x1B\x1B\x1B'))
+        return SmlFrame(msg[8: -1 * (8 + padding)].replace(b'\x1B\x1B\x1B\x1B\x1B\x1B\x1B\x1B', b'\x1B\x1B\x1B\x1B'),
+                        build_ctx=self.build_ctx)

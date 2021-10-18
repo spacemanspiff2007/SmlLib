@@ -22,3 +22,4 @@ exclude =
     dist,
     conf,
     venv
+    __init__.py

@@ -1,19 +1,19 @@
 from typing import List, Optional
 
-from .sml_fields import EndofSmlMsg, SmlListEntry, SmlMessage
-
-
-class InvalidBufferPos(Exception):
-    pass
+from smllib.builder import create_context, CTX_HINT
+from smllib.errors import InvalidBufferPos
+from smllib.sml import EndOfSmlMsg, SmlListEntry, SmlMessage
 
 
 class SmlFrame:
-    def __init__(self, buffer: bytes):
+    def __init__(self, buffer: bytes, build_ctx: CTX_HINT = None):
         self.bytes = buffer
         self.buffer = memoryview(buffer)
         self.buf_len = len(buffer)
 
         self.next_pos = 0
+
+        self.build_ctx: CTX_HINT = build_ctx if build_ctx is not None else create_context()
 
     def get_value(self, pos: Optional[int] = None):
         if pos is None:
@@ -38,7 +38,7 @@ class SmlFrame:
         # End of a SmlMSg
         if v == 0x00:
             self.next_pos = pos + 1
-            return EndofSmlMsg
+            return EndOfSmlMsg
 
         # types with dynamic size
         s_pos = pos
@@ -54,7 +54,7 @@ class SmlFrame:
         # type is a list
         if _type == 0x70:
             self.next_pos = s_pos + 1   # Must be s_pos because we can have lists with a long length
-            return [None for i in range(_size)]
+            return [None for _ in range(_size)]
 
         # End position
         e_pos = pos + _size
@@ -76,6 +76,7 @@ class SmlFrame:
 
     def parse_frame(self) -> List[SmlMessage]:
         ret = []
+        self.next_pos = 0
         while self.next_pos < self.buf_len:
 
             if not self.buffer[self.next_pos] == 0x76:
@@ -87,10 +88,7 @@ class SmlFrame:
             # This will always return a list
             val = self.get_value()
             self._parse_msg(val)
-            if val[-1] != EndofSmlMsg:
-                raise ValueError(f'Last Entry is not {EndofSmlMsg}! Something went wrong!')
-
-            ret.append(SmlMessage.from_list(val))
+            ret.append(self.build_ctx[SmlMessage].build(val, self.build_ctx))
         return ret
 
     def _parse_msg(self, parent_obj=None):
@@ -110,5 +108,5 @@ class SmlFrame:
                 continue
 
             self._parse_msg(data)
-            ret.append(SmlListEntry.from_list(data))
+            ret.append(self.build_ctx[SmlListEntry].build(data, self.build_ctx))
         return ret
