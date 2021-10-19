@@ -12,4 +12,5 @@ from smllib.crc import get_crc
 ))
 def test_crc(msg):
     _msg = a2b_hex(msg)
-    assert f'{_msg[-3]:02x}{_msg[-2]:02x}' == f'{get_crc(_msg[:-4]):04x}'
+    crc_msg = f'{_msg[-3]:02x}{_msg[-2]:02x}'
+    assert crc_msg == f'{get_crc(_msg[:-4]):04x}'

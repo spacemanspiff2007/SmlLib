@@ -28,6 +28,7 @@ class SmlListEntry(SmlBaseObj):
         return f'<{", ".join(r)}>'
 
     def format_msg(self, indent: int = 0):
+        indent += 1
         r = f'<{self.__class__.__name__}>\n'
         w = max(map(len, self.__dict__), default=0)
         for k, v in self.__dict__.items():
