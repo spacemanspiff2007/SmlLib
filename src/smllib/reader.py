@@ -57,5 +57,5 @@ class SmlStreamReader:
         if crc_msg != crc_calc:
             raise CrcError(msg, crc_msg, crc_calc)
 
-        return SmlFrame(msg[8: -1 * (8 + padding)].replace(b'\x1B\x1B\x1B\x1B\x1B\x1B\x1B\x1B', b'\x1B\x1B\x1B\x1B'),
-                        build_ctx=self.build_ctx)
+        frame = msg[8: -1 * (8 + padding)].replace(b'\x1B\x1B\x1B\x1B\x1B\x1B\x1B\x1B', b'\x1B\x1B\x1B\x1B')
+        return SmlFrame(frame, msg_ctx=msg, build_ctx=self.build_ctx)

@@ -6,13 +6,14 @@ from smllib.sml import EndOfSmlMsg, SmlListEntry, SmlMessage
 
 
 class SmlFrame:
-    def __init__(self, buffer: bytes, build_ctx: CTX_HINT = None):
+    def __init__(self, buffer: bytes, build_ctx: CTX_HINT = None, msg_ctx: Optional[bytes] = None):
         self.bytes = buffer
         self.buffer = memoryview(buffer)
         self.buf_len = len(buffer)
 
         self.next_pos = 0
 
+        self.msg_ctx = msg_ctx
         self.build_ctx: CTX_HINT = build_ctx if build_ctx is not None else create_context()
 
     def get_value(self, pos: Optional[int] = None):
