@@ -1,21 +1,22 @@
 from smllib.builder import SmlCloseResponseBuilder, SmlGetListResponseBuilder, \
     SmlListEntryBuilder, SmlMessageBuilder, SmlObjBuilder
 from smllib.sml import EndOfSmlMsg, SmlCloseResponse, SmlGetListResponse, SmlListEntry
+from tests.helper import in_snip
 
 
 def test_build_entry():
     builder = SmlListEntryBuilder()
-    obj = builder.build(['obis', None, None, None, None, '76616c', None], {SmlListEntry: builder})
+    obj = builder.build(in_snip(['obis', None, None, None, None, '76616c', None]), {SmlListEntry: builder})
     assert obj.obis == 'obis'
     assert obj.value == 'val'
 
 
 def test_build_entry_list():
-    data = [
+    data = in_snip([
         None, 'server', None, None,
         [['obis1', None, None, None, None, '76616c31', None], ['obis2', None, None, None, None, '76616c32', None]],
         None, None
-    ]
+    ])
 
     builder = SmlGetListResponseBuilder()
 
@@ -43,9 +44,9 @@ def test_build_entry_list():
 
 
 def test_build_choice():
+    data = in_snip(['t1', 1, 0, [0x0201, ['sig']], 1111, EndOfSmlMsg])
     builder = SmlMessageBuilder()
-    obj = builder.build(['t1', 1, 0, [0x0201, ['sig']], 1111, EndOfSmlMsg],
-                        {SmlCloseResponse: SmlCloseResponseBuilder()})
+    obj = builder.build(data, {SmlCloseResponse: SmlCloseResponseBuilder()})
     assert obj.transaction_id == 't1'
     assert obj.group_no == 1
     assert obj.abort_on_error == 0
@@ -61,7 +62,8 @@ def test_build_choice():
             ret.global_signature += '_patched'
             return ret
 
-    obj = builder.build(['t1', 1, 0, [0x0201, ['sig']], 1111, EndOfSmlMsg], {SmlCloseResponse: PatchedBuilder()})
+    data = in_snip(['t1', 1, 0, [0x0201, ['sig']], 1111, EndOfSmlMsg])
+    obj = builder.build(data, {SmlCloseResponse: PatchedBuilder()})
     assert obj.transaction_id == 't1'
     assert obj.group_no == 1
     assert obj.abort_on_error == 0

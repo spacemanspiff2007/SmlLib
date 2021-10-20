@@ -1,9 +1,11 @@
-from smllib.sml import SmlOpenResponse, SmlCloseResponse, SmlGetListResponse, SmlListEntry, SmlMessage
-from smllib.builder import SmlOpenResponseBuilder, SmlCloseResponseBuilder, SmlGetListResponseBuilder, SmlListEntryBuilder, SmlMessageBuilder
+from smllib.builder import SmlCloseResponseBuilder, \
+    SmlGetListResponseBuilder, SmlListEntryBuilder, SmlOpenResponseBuilder
+from smllib.sml import SmlListEntry
+from tests.helper import in_snip
 
 
 def test_open_response():
-    r = SmlOpenResponseBuilder().build([None, None, 'ab', 'cd', None, 1], {})
+    r = SmlOpenResponseBuilder().build(in_snip([None, None, 'ab', 'cd', None, 1]), {})
     assert r.format_msg() == '<SmlOpenResponse>\n' \
                              '  codepage   : None\n' \
                              '  client_id  : None\n' \
@@ -14,21 +16,21 @@ def test_open_response():
 
 
 def test_close_response():
-    r = SmlCloseResponseBuilder().build(['my_sig'], {})
+    r = SmlCloseResponseBuilder().build(in_snip(['my_sig']), {})
     assert r.format_msg() == '<SmlCloseResponse>\n' \
                              '  global_signature: my_sig\n'
 
 
 def test_list_entry():
-    data = [
+    data = in_snip([
         None, 'server', None, None,
         [['obis1', None, None, None, None, '76616c31', None], ['obis2', None, None, None, None, '76616c32', None]],
         None, None
-    ]
-    
+    ])
+
     builder = SmlGetListResponseBuilder()
     obj = builder.build(data, {SmlListEntry: SmlListEntryBuilder()})
-    
+
     assert obj.format_msg() == '<SmlGetListResponse>\n' \
                                '  client_id       : None\n' \
                                '  sever_id        : server\n' \

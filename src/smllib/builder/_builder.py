@@ -13,13 +13,14 @@ class SmlObjBuilder:
 
     def build(self, obj: list, classes: Dict[Type[SmlBaseObj], 'SmlObjBuilder']) -> T_SML_OBJ:
         # check length
-        if len(self.fields) != len(obj):
+        lst = obj.value
+        if len(self.fields) != len(lst):
             raise WrongArgCount()
 
         out = self.BUILDS()
         for i, a in enumerate(self.fields.items()):   # type: int, Tuple[str, SmlObjFieldInfo]
             name, field = a
-            value = obj[i]
+            value = lst[i].value
 
             # rebuild with choice
             if field.choice is not None:

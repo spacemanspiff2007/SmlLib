@@ -11,8 +11,9 @@ class SmlMessageBuilder(SmlObjBuilder):
     BUILDS = smllib.sml.SmlMessage
 
     def build(self, obj: list, classes: Dict[Type[SmlBaseObj], SmlObjBuilder]) -> smllib.sml.SmlMessage:
-        if obj[5] is not EndOfSmlMsg:
+        lst = obj.value
+        if lst[5].value is not EndOfSmlMsg:
             raise EndOfSmlMsgExpected()
-        obj.pop(5)
+        lst.pop(5)
 
         return super().build(obj, classes)
