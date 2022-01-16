@@ -115,7 +115,18 @@ class SmlFrame:
         """Returns all obis values in the frame without parsing the frame"""
         ret = []
         start = -1
-        while (start := self.bytes.find(b'\x77\x07\x01', start + 1)) != -1:
+        offset = 1
+        while (start := self.bytes.find(b'\x77\x07\x01', start + offset)) != -1:
+            list_len = self.bytes[start] & 0x0F
+            offset = 1
+            for _ in range(list_len):
+                entry_len = self.bytes[start+offset] & 0x0F
+                entry_type = self.bytes[start+offset] >> 4
+                if entry_type == 7:
+                    raise WrongValueType(f'List is not supported as type for OBIS entries')
+                # sum up size of all OBIS entries and use it as offset for next OBIS search start (to ensure that no content with data 0x7707 is detected as new OBIS start)
+                offset = offset + entry_len
+
             data = self.get_value(start)
             if not isinstance(data.value, list):
                 continue
