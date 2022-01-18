@@ -36,7 +36,7 @@ class FieldValueTypeDoesNotMatch(SmlLibException):
         super().__init__(*args)
         self.cls = cls
         self.field: str = field
-        self.type: typing.Union[str, int, float] = type
+        self.type: typing.Type[typing.Union[str, int, float]] = type
 
     def __str__(self) -> str:
         return f'Field value type does not match for for {self.field} in {self.cls.__name__}: {self.type.__name__}'

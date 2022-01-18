@@ -114,12 +114,15 @@ class SmlFrame:
     def get_obis(self) -> List[SmlListEntry]:
         """Returns all obis values in the frame without parsing the frame"""
         ret = []
-        start = -1
-        while (start := self.bytes.find(b'\x77\x07\x01', start + 1)) != -1:
-            data = self.get_value(start)
+        pos = 0
+        while (pos := self.bytes.find(b'\x77\x07\x01', pos)) != -1:
+            data = self.get_value(pos)
             if not isinstance(data.value, list):
                 continue
 
             self._parse_msg(data)
             ret.append(self.build_ctx[SmlListEntry].build(data, self.build_ctx))
+
+            # Don't search in the frame again since the payload might contain '770701'
+            pos = self.next_pos
         return ret

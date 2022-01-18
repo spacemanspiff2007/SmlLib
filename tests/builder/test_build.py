@@ -6,15 +6,16 @@ from tests.helper import in_snip
 
 def test_build_entry():
     builder = SmlListEntryBuilder()
-    obj = builder.build(in_snip(['obis', None, None, None, None, '76616c', None]), {SmlListEntry: builder})
-    assert obj.obis == 'obis'
+    obj = builder.build(in_snip(['0100010800ff', None, None, None, None, '76616c', None]), {SmlListEntry: builder})
+    assert obj.obis == '0100010800ff'
     assert obj.value == 'val'
 
 
 def test_build_entry_list():
     data = in_snip([
         None, 'server', None, None,
-        [['obis1', None, None, None, None, '76616c31', None], ['obis2', None, None, None, None, '76616c32', None]],
+        [['0100010800ff', None, None, None, None, '76616c31', None],
+         ['0100010801ff', None, None, None, None, '76616c32', None]],
         None, None
     ])
 
@@ -22,9 +23,9 @@ def test_build_entry_list():
 
     obj = builder.build(data, {SmlListEntry: SmlListEntryBuilder()})  # type: SmlGetListResponse
     assert obj.sever_id == 'server'
-    assert obj.val_list[0].obis == 'obis1'
+    assert obj.val_list[0].obis == '0100010800ff'
     assert obj.val_list[0].value == 'val1'
-    assert obj.val_list[1].obis == 'obis2'
+    assert obj.val_list[1].obis == '0100010801ff'
     assert obj.val_list[1].value == 'val2'
 
     class PatchedBuilder(SmlListEntryBuilder):
@@ -37,9 +38,9 @@ def test_build_entry_list():
 
     obj = builder.build(data, {SmlListEntry: PatchedBuilder()})  # type: SmlGetListResponse
     assert obj.sever_id == 'server'
-    assert obj.val_list[0].obis == 'obis1_patched'
+    assert obj.val_list[0].obis == '0100010800ff_patched'
     assert obj.val_list[0].value == 'val1'
-    assert obj.val_list[1].obis == 'obis2_patched'
+    assert obj.val_list[1].obis == '0100010801ff_patched'
     assert obj.val_list[1].value == 'val2'
 
 

@@ -1,7 +1,7 @@
 from smllib.sml_frame import SmlFrameSnippet
 
 
-def in_snip(obj, pack_top = True) -> SmlFrameSnippet:
+def in_snip(obj, pack_top=True) -> SmlFrameSnippet:
     if not isinstance(obj, (list, tuple)):
         return SmlFrameSnippet(obj, 'from in_snip')
 

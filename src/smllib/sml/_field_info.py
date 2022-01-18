@@ -4,7 +4,7 @@ from smllib.sml import SmlBaseObj, SmlChoice
 
 
 class SmlObjFieldInfo:
-    def __init__(self, func: Optional[Callable[[List[Any]], 'SmlBaseObj']] = None, type=None,
+    def __init__(self, func: Optional[Callable[[List[Any], Any], 'SmlBaseObj']] = None, type=None,
                  choice: Optional[SmlChoice] = None, is_container=False):
         self.func = func
         self.type = type
@@ -17,6 +17,18 @@ class SmlObjFieldInfo:
 
     def copy(self) -> 'SmlObjFieldInfo':
         return self.__class__(func=self.func, type=self.type, choice=self.choice, is_container=self.is_container)
+
+    def __repr__(self):
+        c = []
+        if self.func is not None:
+            c.append(f'func={self.func.__name__}')
+        if self.type is not None:
+            c.append(f'type={self.type.__name__}')
+        if self.choice is not None:
+            c.append(f'choice={self.choice}')
+        if self.is_container is not None:
+            c.append(f'is_container={self.is_container}')
+        return f'<{self.__class__.__name__} {", ".join(c)} at {id(self):X}>'
 
 
 def inspect_obj(cls: Type['SmlBaseObj']) -> Dict[str, SmlObjFieldInfo]:

@@ -1,4 +1,4 @@
-from typing import Any, Callable, Dict, List, Tuple, Type, Union
+from typing import Any, Callable, List, Mapping, Tuple, Type, Union
 
 from smllib.errors import UnsupportedType, WrongArgCount
 from smllib.sml import SmlBaseObj
@@ -6,7 +6,7 @@ from smllib.sml_frame_snippet import SmlFrameSnippet
 
 
 class SmlChoice:
-    def __init__(self, choices: Dict[int, Union[Type[SmlBaseObj], Callable[[List[Any]], Any]]]):
+    def __init__(self, choices: Mapping[int, Union[Type[SmlBaseObj], Callable[[List[Any]], Any]]]):
         self.choices = choices
 
     def get(self, obj: List[SmlFrameSnippet]) -> Union[Tuple[None, Any], Tuple[Type[SmlBaseObj], Any]]:

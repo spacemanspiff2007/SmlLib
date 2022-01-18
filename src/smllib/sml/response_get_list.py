@@ -1,4 +1,4 @@
-from typing import Optional, Tuple
+from typing import Dict, Optional, Tuple
 
 from smllib.sml import SmlBaseObj, SmlListEntry, SmlObjFieldInfo
 
@@ -6,7 +6,7 @@ from .sml_time import build_time, TIME_HINT
 
 
 class SmlGetListResponse(SmlBaseObj):
-    __sml__ = {
+    __sml__: Dict[str, SmlObjFieldInfo] = {
         'act_sensor_time': SmlObjFieldInfo(func=build_time),
         'act_gateway_time': SmlObjFieldInfo(func=build_time),
     }

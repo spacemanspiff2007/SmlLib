@@ -24,7 +24,8 @@ def test_close_response():
 def test_list_entry():
     data = in_snip([
         None, 'server', None, None,
-        [['obis1', None, None, None, None, '76616c31', None], ['obis2', None, None, None, None, '76616c32', None]],
+        [['0100010800ff', None, None, None, None, '76616c31', None],
+         ['0100010801ff', None, None, None, None, '76616c32', None]],
         None, None
     ])
 
@@ -38,20 +39,22 @@ def test_list_entry():
                                '  act_sensor_time : None\n' \
                                '  val_list:\n' \
                                '    <SmlListEntry>\n' \
-                               '      obis           : obis1\n' \
+                               '      obis           : 0100010800ff (1-0:1.8.0*255)\n' \
                                '      status         : None\n' \
                                '      val_time       : None\n' \
                                '      unit           : None\n' \
                                '      scaler         : None\n' \
                                '      value          : val1\n' \
                                '      value_signature: None\n' \
+                               '      -> (Zählerstand Total)\n' \
                                '    <SmlListEntry>\n' \
-                               '      obis           : obis2\n' \
+                               '      obis           : 0100010801ff (1-0:1.8.1*255)\n' \
                                '      status         : None\n' \
                                '      val_time       : None\n' \
                                '      unit           : None\n' \
                                '      scaler         : None\n' \
                                '      value          : val2\n' \
                                '      value_signature: None\n' \
+                               '      -> (Zählerstand Tarif 1)\n' \
                                '  list_signature  : None\n' \
                                '  act_gateway_time: None\n'

@@ -33,6 +33,12 @@ parsed_msgs = sml_frame.parse_frame()
 for msg in parsed_msgs:
     # prints a nice overview over the received values
     print(msg.format_msg())
+
+# The obis attribute of the SmlListEntry carries different obis representations as attributes
+list_entry = obis_values[0]
+print(list_entry.obis)            # 0100010800ff
+print(list_entry.obis.obis_code)  # 1-0:1.8.0*255
+print(list_entry.obis.obis_short) # 1.8.0
 ```
 
 ```text
@@ -59,7 +65,7 @@ SmlMessage
         act_sensor_time : 226361515
         val_list: list
             <SmlListEntry>
-                obis           : 8181c78203ff
+                obis           : 8181c78203ff (129-129:199.130.3*255)
                 status         : None
                 val_time       : None
                 unit           : None
@@ -68,7 +74,7 @@ SmlMessage
                 value_signature: None
                 -> (Hersteller-Identifikation)
             <SmlListEntry>
-                obis           : 0100000009ff
+                obis           : 0100000009ff (1-0:0.0.9*255)
                 status         : None
                 val_time       : None
                 unit           : None
@@ -77,7 +83,7 @@ SmlMessage
                 value_signature: None
                 -> (Geräteeinzelidentifikation)
             <SmlListEntry>
-                obis           : 0100010800ff
+                obis           : 0100010800ff (1-0:1.8.0*255)
                 status         : 386
                 val_time       : None
                 unit           : 30
@@ -86,7 +92,7 @@ SmlMessage
                 value_signature: None
                 -> 12345678.9Wh (Zählerstand Total)
             <SmlListEntry>
-                obis           : 0100010801ff
+                obis           : 0100010801ff (1-0:1.8.1*255)
                 status         : None
                 val_time       : None
                 unit           : 30
@@ -95,7 +101,7 @@ SmlMessage
                 value_signature: None
                 -> 12345678.9Wh (Zählerstand Tarif 1)
             <SmlListEntry>
-                obis           : 0100010802ff
+                obis           : 0100010802ff (1-0:1.8.2*255)
                 status         : None
                 val_time       : None
                 unit           : 30
@@ -104,7 +110,7 @@ SmlMessage
                 value_signature: None
                 -> 0.0Wh (Zählerstand Tarif 2)
             <SmlListEntry>
-                obis           : 0100100700ff
+                obis           : 0100100700ff (1-0:16.7.0*255)
                 status         : None
                 val_time       : None
                 unit           : 27
@@ -113,7 +119,7 @@ SmlMessage
                 value_signature: None
                 -> 555W (aktuelle Wirkleistung)
             <SmlListEntry>
-                obis           : 8181c78205ff
+                obis           : 8181c78205ff (129-129:199.130.5*255)
                 status         : None
                 val_time       : None
                 unit           : None

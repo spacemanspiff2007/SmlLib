@@ -1,17 +1,18 @@
-from typing import Dict, Tuple, Type, TypeVar
+from typing import Dict, Generic, Tuple, Type, TypeVar
 
 from smllib.errors import WrongArgCount, WrongValueType
 from smllib.sml import inspect_obj, SmlBaseObj, SmlObjFieldInfo, T_SML_OBJ
+from smllib.sml_frame_snippet import SmlFrameSnippet
 
 
-class SmlObjBuilder:
+class SmlObjBuilder(Generic[T_SML_OBJ]):
     BUILDS: Type[T_SML_OBJ]
 
     def __init__(self):
         assert issubclass(self.BUILDS, SmlBaseObj), self.BUILDS
         self.fields: Dict[str, SmlObjFieldInfo] = inspect_obj(self.BUILDS)
 
-    def build(self, obj: list, classes: Dict[Type[SmlBaseObj], 'SmlObjBuilder']) -> T_SML_OBJ:
+    def build(self, obj: SmlFrameSnippet, classes: Dict[Type[SmlBaseObj], 'SmlObjBuilder']) -> T_SML_OBJ:
         # check length
         lst = obj.value
         if len(self.fields) != len(lst):

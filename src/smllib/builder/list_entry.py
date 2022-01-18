@@ -6,7 +6,7 @@ from smllib.sml import SmlListEntry
 from smllib.sml._base_obj import SmlBaseObj
 
 
-class SmlListEntryBuilder(SmlObjBuilder):
+class SmlListEntryBuilder(SmlObjBuilder[SmlListEntry]):
     BUILDS = SmlListEntry
 
     def build(self, obj: list, classes: Dict[Type[SmlBaseObj], 'SmlObjBuilder']) -> SmlListEntry:

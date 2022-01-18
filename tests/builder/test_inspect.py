@@ -3,6 +3,7 @@ from datetime import datetime
 from smllib.sml import inspect_obj, SmlChoice, SmlCloseResponse, \
     SmlGetListResponse, SmlListEntry, SmlObjFieldInfo, SmlOpenResponse
 from smllib.sml.message import MSG_TYPES, SmlMessage
+from smllib.sml.sml_obis import build_obis, ObisCode
 from smllib.sml.sml_time import build_time
 
 
@@ -20,7 +21,7 @@ def test_inspect_sml_message():
 def test_inspect_sml_list_entry():
     fields = inspect_obj(SmlListEntry)
     assert list(fields.keys()) == ['obis', 'status', 'val_time', 'unit', 'scaler', 'value', 'value_signature']
-    assert fields['obis'] == SmlObjFieldInfo(type=str)
+    assert fields['obis'] == SmlObjFieldInfo(type=ObisCode, func=build_obis)
     assert fields['status'] == SmlObjFieldInfo(type=(int, type(None)))
     assert fields['val_time'] == SmlObjFieldInfo(type=(type(None), int, datetime), func=build_time)
     assert fields['unit'] == SmlObjFieldInfo(type=(int, type(None)))

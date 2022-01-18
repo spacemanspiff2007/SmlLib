@@ -13,6 +13,7 @@ from smllib.sml._field_info import inspect_obj, SmlObjFieldInfo
 from smllib.sml.list_entry import SmlListEntry
 from smllib.sml.response_get_list import SmlGetListResponse
 from smllib.sml.response_open_close import SmlCloseResponse, SmlOpenResponse
+from smllib.sml.sml_obis import ObisCode
 
 # isort: split
 from smllib.sml.message import SmlMessage
