@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 from typing import Union
 
-from smllib.errors import UnsupportedType
+from smllib.errors import UnsupportedChoiceValue
 
 TIME_HINT = Union[None, int, datetime]
 
@@ -25,4 +25,4 @@ def build_time(_in):
         ts, offset1, offset2 = value_s.value
         return datetime.utcfromtimestamp(ts.value) + timedelta(minutes=offset1.value) + timedelta(minutes=offset2.value)
 
-    raise UnsupportedType(_type)
+    raise UnsupportedChoiceValue(_type)

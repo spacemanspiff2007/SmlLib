@@ -1,6 +1,9 @@
-from typing import Optional, Union
+from typing import Optional, Type, TypeVar, Union
 
+from smllib.errors import WrongValueType
 from smllib.sml.sml_eom import CEndOfSmlMsg
+
+SNIP_TYPE = TypeVar('SNIP_TYPE', bound=object)
 
 
 class SmlFrameSnippet:
@@ -23,3 +26,9 @@ class SmlFrameSnippet:
         assert self.msg is None
         self.msg = buf[self.pos: pos]
         return self
+
+    def get_value(self, val_type: Type[SNIP_TYPE]) -> SNIP_TYPE:
+        value = self.value
+        if not isinstance(value, val_type):
+            raise WrongValueType(f'Expected type {val_type.__name__} but got type {type(value).__name__}')
+        return value

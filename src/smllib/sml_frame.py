@@ -103,7 +103,7 @@ class SmlFrame:
 
     def _parse_msg(self, parent_obj: SmlFrameSnippet) -> SmlFrameSnippet:
         # it's always a list now
-        _lst = parent_obj.value
+        _lst = parent_obj.get_value(list)
         for i, _ in enumerate(_lst):
             _lst[i] = v = self.get_value()
             if isinstance(v.value, list):

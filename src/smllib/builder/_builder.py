@@ -14,7 +14,7 @@ class SmlObjBuilder(Generic[T_SML_OBJ]):
 
     def build(self, obj: SmlFrameSnippet, classes: Dict[Type[SmlBaseObj], 'SmlObjBuilder']) -> T_SML_OBJ:
         # check length
-        lst = obj.value
+        lst = obj.get_value(list)
         if len(self.fields) != len(lst):
             raise WrongArgCount()
 
@@ -25,17 +25,16 @@ class SmlObjBuilder(Generic[T_SML_OBJ]):
 
             # rebuild with choice
             if field.choice is not None:
-                cls, value = field.choice.get(value)
-                if cls is not None:
-                    value = classes[cls].build(value, classes)
+                choice_cls, value = field.choice.get(value)
+                value = classes[choice_cls].build(value, classes)
 
             func = field.func
             if func is not None:
                 value = func(value)
 
             if field.is_container:
-                cls = classes[field.type]
-                value = tuple([cls.build(v, classes) for v in value])
+                cls_builder = classes[field.type]
+                value = tuple([cls_builder.build(v, classes) for v in value])
             else:
                 if not isinstance(value, field.type):
                     raise WrongValueType(f'{value} ({type(value)}) != {field.type}')

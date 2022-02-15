@@ -12,7 +12,8 @@ class SmlMessageBuilder(SmlObjBuilder[smllib.sml.SmlMessage]):
     BUILDS = smllib.sml.SmlMessage
 
     def build(self, obj: SmlFrameSnippet, classes: Dict[Type[SmlBaseObj], SmlObjBuilder]) -> smllib.sml.SmlMessage:
-        lst = obj.value
+
+        lst = obj.get_value(list)
         if lst[5].value is not EndOfSmlMsg:
             raise EndOfSmlMsgExpected()
         lst.pop(5)

@@ -4,12 +4,13 @@ from typing import Dict, Type
 from smllib.builder import SmlObjBuilder
 from smllib.sml import SmlListEntry
 from smllib.sml._base_obj import SmlBaseObj
+from smllib.sml_frame_snippet import SmlFrameSnippet
 
 
 class SmlListEntryBuilder(SmlObjBuilder[SmlListEntry]):
     BUILDS = SmlListEntry
 
-    def build(self, obj: list, classes: Dict[Type[SmlBaseObj], 'SmlObjBuilder']) -> SmlListEntry:
+    def build(self, obj: SmlFrameSnippet, classes: Dict[Type[SmlBaseObj], 'SmlObjBuilder']) -> SmlListEntry:
         ret = super().build(obj, classes)    # type: SmlListEntry
 
         value = ret.value

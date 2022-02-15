@@ -52,7 +52,10 @@ class SmlListEntry(SmlBaseObj):
             r += f'{INDENT*indent}-> {summary:s}\n'
         return r
 
-    def get_value(self) -> Union[float, str]:
+    def get_value(self) -> Union[None, float, str]:
+        if self.value is None:
+            return None
+
         # Some devices report the texts with scaler 0
         if self.scaler is None or isinstance(self.value, str):
             return self.value

@@ -42,7 +42,7 @@ class FieldValueTypeDoesNotMatch(SmlLibException):
         return f'Field value type does not match for for {self.field} in {self.cls.__name__}: {self.type.__name__}'
 
 
-class UnsupportedType(SmlLibException):
+class UnsupportedChoiceValue(SmlLibException):
     def __init__(self, type: int, *args: object) -> None:
         super().__init__(*args)
         self.type: int = type

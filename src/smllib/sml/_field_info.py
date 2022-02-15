@@ -1,14 +1,14 @@
-from typing import Any, Callable, Dict, get_args, get_origin, get_type_hints, List, Optional, Type, Union
+from typing import Any, Callable, Dict, Final, get_args, get_origin, get_type_hints, Optional, Type, Union
 
 from smllib.sml import SmlBaseObj, SmlChoice
 
 
 class SmlObjFieldInfo:
-    def __init__(self, func: Optional[Callable[[List[Any], Any], 'SmlBaseObj']] = None, type=None,
+    def __init__(self, func: Optional[Callable[[Any], Any]] = None, type=None,
                  choice: Optional[SmlChoice] = None, is_container=False):
-        self.func = func
+        self.func: Final = func
+        self.choice: Final = choice
         self.type = type
-        self.choice = choice
         self.is_container = is_container
 
     def __eq__(self, other):
