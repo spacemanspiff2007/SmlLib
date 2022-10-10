@@ -34,7 +34,7 @@ def test_list_entry():
 
     assert obj.format_msg() == '<SmlGetListResponse>\n' \
                                '  client_id       : None\n' \
-                               '  sever_id        : server\n' \
+                               '  server_id        : server\n' \
                                '  list_name       : None\n' \
                                '  act_sensor_time : None\n' \
                                '  val_list:\n' \

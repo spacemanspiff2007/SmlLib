@@ -12,7 +12,7 @@ class SmlGetListResponse(SmlBaseObj):
     }
 
     client_id: Optional[str]
-    sever_id: str
+    server_id: str
     list_name: Optional[str]
     act_sensor_time: TIME_HINT
     val_list: Tuple[SmlListEntry, ...]

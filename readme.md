@@ -60,7 +60,7 @@ SmlMessage
     abort_on_error: 0
     message_body <SmlGetListResponse>
         client_id       : None
-        sever_id        : 11111111111111111111
+        server_id        : 11111111111111111111
         list_name       : 0100620affff
         act_sensor_time : 226361515
         val_list: list
