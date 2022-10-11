@@ -76,6 +76,7 @@ OBIS_NAMES = {
     '0100010801ff': 'Zählerstand Tarif 1',
     '0100010802ff': 'Zählerstand Tarif 2',
     '0100011100ff': 'Total-Zählerstand',
+    '0100020800ff': 'Wirkenergie Total',
     '0100100700ff': 'aktuelle Wirkleistung',
     '0100170700ff': 'Momentanblindleistung L1',
     '01001f0700ff': 'Strom L1',
@@ -100,6 +101,7 @@ OBIS_NAMES = {
     '010060320005': 'Gemittelte Chiptemperatur',
     '010060320303': 'Spannungsminimum',
     '010060320304': 'Spannungsmaximum',
+    '01000e0700ff': 'Netz Frequenz',
     '8181c78203ff': 'Hersteller-Identifikation',
     '8181c78205ff': 'Öffentlicher Schlüssel',
 }
