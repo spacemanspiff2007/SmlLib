@@ -22,7 +22,7 @@ def test_build_entry_list():
     builder = SmlGetListResponseBuilder()
 
     obj = builder.build(data, {SmlListEntry: SmlListEntryBuilder()})  # type: SmlGetListResponse
-    assert obj.sever_id == 'server'
+    assert obj.server_id == 'server'
     assert obj.val_list[0].obis == '0100010800ff'
     assert obj.val_list[0].value == 'val1'
     assert obj.val_list[1].obis == '0100010801ff'
@@ -37,7 +37,7 @@ def test_build_entry_list():
             return ret
 
     obj = builder.build(data, {SmlListEntry: PatchedBuilder()})  # type: SmlGetListResponse
-    assert obj.sever_id == 'server'
+    assert obj.server_id == 'server'
     assert obj.val_list[0].obis == '0100010800ff_patched'
     assert obj.val_list[0].value == 'val1'
     assert obj.val_list[1].obis == '0100010801ff_patched'
