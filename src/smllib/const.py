@@ -72,11 +72,14 @@ UNITS = {
 # https://www.promotic.eu/en/pmdoc/Subsystems/Comm/PmDrivers/IEC62056_OBIS.htm
 OBIS_NAMES = {
     '0100000009ff': 'Geräteeinzelidentifikation',
-    '0100010800ff': 'Zählerstand Total',
-    '0100010801ff': 'Zählerstand Tarif 1',
-    '0100010802ff': 'Zählerstand Tarif 2',
+    '0100010800ff': 'Zählerstand Bezug Total',
+    '0100010801ff': 'Zählerstand Bezug Tarif 1',
+    '0100010802ff': 'Zählerstand Bezug Tarif 2',
     '0100011100ff': 'Total-Zählerstand',
-    '0100020800ff': 'Wirkenergie Total',
+    '0100020800ff': 'Zählerstand Einspeisung Total',
+    '0100020801ff': 'Zählerstand Einspeisung Tarif 1',
+    '0100020802ff': 'Zählerstand Einspeisung Tarif 2',
+    '01000f0700ff': 'absolute, aktuelle Wirkleistung',
     '0100100700ff': 'aktuelle Wirkleistung',
     '0100170700ff': 'Momentanblindleistung L1',
     '01001f0700ff': 'Strom L1',
