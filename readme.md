@@ -2,7 +2,7 @@
 [![Tests Status](https://github.com/spacemanspiff2007/SmlLib/workflows/Tests/badge.svg)](https://github.com/spacemanspiff2007/SmlLib/actions?query=workflow%3ATests)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/SmlLib)](https://pypi.org/project/smllib/)
 [![PyPI](https://img.shields.io/pypi/v/SmlLib)](https://pypi.org/project/smllib/)
-[![Downloads](https://pepy.tech/badge/SmlLib)](https://pepy.tech/project/SmlLib/month)
+[![Downloads](https://pepy.tech/badge/SmlLib)](https://pepy.tech/project/SmlLib)
 
 
 _A SML (Smart Message Language) library_
@@ -24,6 +24,11 @@ stream.add(b'BytesFromSerialPort')
 sml_frame = stream.get_frame()
 if sml_frame is None:
     print('Bytes missing')
+
+# Add more bytes, once it's a complete frame the SmlStreamReader will
+# return the frame instead of None
+stream.add(b'BytesFromSerialPort')
+sml_frame = stream.get_frame()
 
 # Shortcut to extract all values without parsing the whole frame
 obis_values = sml_frame.get_obis()
