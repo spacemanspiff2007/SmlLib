@@ -46,7 +46,7 @@ def test_list_entry():
                                '      scaler         : None\n' \
                                '      value          : val1\n' \
                                '      value_signature: None\n' \
-                               '      -> (Zählerstand Total)\n' \
+                               '      -> (Zählerstand Bezug Total)\n' \
                                '    <SmlListEntry>\n' \
                                '      obis           : 0100010801ff (1-0:1.8.1*255)\n' \
                                '      status         : None\n' \
@@ -55,6 +55,6 @@ def test_list_entry():
                                '      scaler         : None\n' \
                                '      value          : val2\n' \
                                '      value_signature: None\n' \
-                               '      -> (Zählerstand Tarif 1)\n' \
+                               '      -> (Zählerstand Bezug Tarif 1)\n' \
                                '  list_signature  : None\n' \
                                '  act_gateway_time: None\n'

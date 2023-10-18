@@ -9,7 +9,7 @@ from smllib.sml_frame import SmlFrame
 class SmlStreamReader:
     MAX_SIZE = 50 * 1024
 
-    def __init__(self, build_ctx: CTX_HINT = None):
+    def __init__(self, build_ctx: Optional[CTX_HINT] = None):
         self.bytes: bytes = b''
         self.build_ctx: CTX_HINT = build_ctx if build_ctx is not None else create_context()
 

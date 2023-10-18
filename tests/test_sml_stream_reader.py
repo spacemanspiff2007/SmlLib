@@ -41,6 +41,6 @@ def test_msg_long_list():
 
     r = SmlStreamReader()
     r.add(msg2)
-    f = r.get_frame()
-    for f in f.parse_frame():
-        f.format_msg()
+    frame = r.get_frame()
+    for msg in frame.parse_frame():
+        msg.format_msg()

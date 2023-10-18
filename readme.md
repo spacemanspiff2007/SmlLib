@@ -30,7 +30,8 @@ if sml_frame is None:
 stream.add(b'BytesFromSerialPort')
 sml_frame = stream.get_frame()
 
-# Shortcut to extract all values without parsing the whole frame
+# A quick Shortcut to extract all values without parsing the whole frame
+# In rare cases this might raise an InvalidBufferPos exception, then you have to use sml_frame.parse_frame()
 obis_values = sml_frame.get_obis()
 
 # return all values but slower
@@ -38,6 +39,9 @@ parsed_msgs = sml_frame.parse_frame()
 for msg in parsed_msgs:
     # prints a nice overview over the received values
     print(msg.format_msg())
+
+# In the parsed message the obis values are typically found like this
+obis_values = parsed_msgs[1].message_body.val_list
 
 # The obis attribute of the SmlListEntry carries different obis representations as attributes
 list_entry = obis_values[0]

@@ -1,2 +1,3 @@
 include LICENSE
 include src/smllib/py.typed
+include py.typed

@@ -1,4 +1,4 @@
-from typing import Dict, Generic, Tuple, Type, TypeVar
+from typing import Dict, Generic, Type, TypeVar
 
 from smllib.errors import WrongArgCount, WrongValueType
 from smllib.sml import inspect_obj, SmlBaseObj, SmlObjFieldInfo, T_SML_OBJ
@@ -19,7 +19,7 @@ class SmlObjBuilder(Generic[T_SML_OBJ]):
             raise WrongArgCount()
 
         out = self.BUILDS()
-        for i, a in enumerate(self.fields.items()):   # type: int, Tuple[str, SmlObjFieldInfo]
+        for i, a in enumerate(self.fields.items()):   # type: int, tuple[str, SmlObjFieldInfo]
             name, field = a
             value = lst[i].value
 

@@ -1,9 +1,8 @@
 from typing import Dict, Type, Union
 
 from smllib.sml import SmlBaseObj, SmlChoice, SmlCloseResponse, SmlGetListResponse, SmlObjFieldInfo, SmlOpenResponse
-from smllib.sml._base_obj import T_SML_OBJ as _T_SML_OBJ
 
-MSG_TYPES: Dict[int, Type[_T_SML_OBJ]] = {
+MSG_TYPES: Dict[int, Type[SmlBaseObj]] = {
     # 0x0100: 'SmlOpenRequest',
     0x0101: SmlOpenResponse,
     # 0x0200: 'SmlCloseRequest',

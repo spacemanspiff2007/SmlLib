@@ -1,6 +1,6 @@
 from smllib.builder import SmlCloseResponseBuilder, SmlGetListResponseBuilder, \
     SmlListEntryBuilder, SmlMessageBuilder, SmlObjBuilder
-from smllib.sml import EndOfSmlMsg, SmlCloseResponse, SmlGetListResponse, SmlListEntry
+from smllib.sml import EndOfSmlMsg, SmlCloseResponse, SmlListEntry
 from tests.helper import in_snip
 
 
@@ -21,7 +21,7 @@ def test_build_entry_list():
 
     builder = SmlGetListResponseBuilder()
 
-    obj = builder.build(data, {SmlListEntry: SmlListEntryBuilder()})  # type: SmlGetListResponse
+    obj = builder.build(data, {SmlListEntry: SmlListEntryBuilder()})
     assert obj.server_id == 'server'
     assert obj.val_list[0].obis == '0100010800ff'
     assert obj.val_list[0].value == 'val1'
@@ -36,7 +36,7 @@ def test_build_entry_list():
             ret.obis += '_patched'
             return ret
 
-    obj = builder.build(data, {SmlListEntry: PatchedBuilder()})  # type: SmlGetListResponse
+    obj = builder.build(data, {SmlListEntry: PatchedBuilder()})
     assert obj.server_id == 'server'
     assert obj.val_list[0].obis == '0100010800ff_patched'
     assert obj.val_list[0].value == 'val1'

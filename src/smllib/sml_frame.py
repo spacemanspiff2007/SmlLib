@@ -7,7 +7,7 @@ from smllib.sml_frame_snippet import SmlFrameSnippet
 
 
 class SmlFrame:
-    def __init__(self, buffer: bytes, build_ctx: CTX_HINT = None, msg_ctx: Optional[bytes] = None):
+    def __init__(self, buffer: bytes, build_ctx: Optional[CTX_HINT] = None, msg_ctx: Optional[bytes] = None):
         self.bytes = buffer
         self.buffer = memoryview(buffer)
         self.buf_len = len(buffer)
