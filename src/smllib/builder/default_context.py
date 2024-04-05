@@ -2,8 +2,15 @@ from typing import Dict, Type
 
 from smllib.sml import SmlBaseObj, SmlCloseResponse, SmlGetListResponse, SmlListEntry, SmlMessage, SmlOpenResponse
 
-from . import SmlCloseResponseBuilder, SmlGetListResponseBuilder, \
-    SmlListEntryBuilder, SmlMessageBuilder, SmlOpenResponseBuilder, T_SML_BUILDER
+from . import (
+    T_SML_BUILDER,
+    SmlCloseResponseBuilder,
+    SmlGetListResponseBuilder,
+    SmlListEntryBuilder,
+    SmlMessageBuilder,
+    SmlOpenResponseBuilder,
+)
+
 
 CTX_HINT = Dict[Type[SmlBaseObj], T_SML_BUILDER]
 

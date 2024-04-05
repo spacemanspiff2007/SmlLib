@@ -1,6 +1,7 @@
 from smllib import errors
 from smllib.__version__ import __version__
 
+
 # isort: split
 
 import smllib.reader

@@ -77,15 +77,15 @@ def test_frames(frame):
     reader = SmlStreamReader()
     reader.add(a2b_hex(frame))
 
-    frame = reader.get_frame()
-    assert frame is not None
+    parsed_frame = reader.get_frame()
+    assert parsed_frame is not None
 
     # ensure that parsing always works
     for _ in range(3):
-        sml_messages = frame.parse_frame()
+        sml_messages = parsed_frame.parse_frame()
         assert len(sml_messages) >= 3, sml_messages
 
-        obis_values = frame.get_obis()
+        obis_values = parsed_frame.get_obis()
         assert len(obis_values) >= 4, obis_values
 
         for obis in obis_values:

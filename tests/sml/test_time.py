@@ -1,10 +1,10 @@
 from datetime import datetime
 
 import pytest
+from tests.helper import in_snip
 
 from smllib.errors import UnsupportedChoiceValue
 from smllib.sml.sml_time import build_time
-from tests.helper import in_snip
 
 
 def test_sml_time():

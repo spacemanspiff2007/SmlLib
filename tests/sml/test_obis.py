@@ -10,7 +10,7 @@ def test_obis():
 
 
 def test_obis_invalid():
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError):  # noqa: PT011
         build_obis(None)
-    with pytest.raises(ValueError):
-        build_obis(None)
+    with pytest.raises(ValueError):  # noqa: PT011
+        build_obis('0100010800')

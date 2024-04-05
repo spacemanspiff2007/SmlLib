@@ -1,15 +1,15 @@
-from typing import Dict, Optional, Union
+from typing import ClassVar, Dict, Optional, Union
 
 from smllib.const import OBIS_NAMES, UNITS
 from smllib.sml import SmlObjFieldInfo
 from smllib.sml._base_obj import INDENT, SmlBaseObj
 
-from .sml_obis import build_obis, ObisCode
-from .sml_time import build_time, TIME_HINT
+from .sml_obis import ObisCode, build_obis
+from .sml_time import TIME_HINT, build_time
 
 
 class SmlListEntry(SmlBaseObj):
-    __sml__: Dict[str, SmlObjFieldInfo] = {
+    __sml__: ClassVar[Dict[str, SmlObjFieldInfo]] = {
         'val_time': SmlObjFieldInfo(func=build_time),
         'obis': SmlObjFieldInfo(func=build_obis)
     }
@@ -35,7 +35,7 @@ class SmlListEntry(SmlBaseObj):
         w = max(map(len, self.__dict__), default=0)
 
         for k, v in self.__dict__.items():
-            r += f'{INDENT*indent}{str(k):{w}s}: {v}{f" ({self.obis.obis_code})" if k == "obis" else ""}\n'
+            r += f'{INDENT*indent}{k!s:{w}s}: {v}{f" ({self.obis.obis_code})" if k == "obis" else ""}\n'
 
         summary = ''
         if self.unit:

@@ -3,6 +3,7 @@ from typing import Union
 
 from smllib.errors import UnsupportedChoiceValue
 
+
 TIME_HINT = Union[None, int, datetime]
 
 

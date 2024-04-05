@@ -1,4 +1,4 @@
-from typing import Any, Callable, Dict, Final, get_args, get_origin, get_type_hints, Optional, Type, Union
+from typing import Any, Callable, Dict, Final, Optional, Type, Union, get_args, get_origin, get_type_hints
 
 from smllib.sml import SmlBaseObj, SmlChoice
 
@@ -64,6 +64,7 @@ def inspect_obj(cls: Type['SmlBaseObj']) -> Dict[str, SmlObjFieldInfo]:
             info.type = args[0]
             continue
 
-        raise ValueError(f'Unknown hint: {origin} for {name}')
+        msg = f'Unknown hint: {origin} for {name}'
+        raise ValueError(msg)
 
     return fields
