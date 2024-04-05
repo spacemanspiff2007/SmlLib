@@ -1,6 +1,6 @@
 from typing import Optional
 
-from smllib.builder import create_context, CTX_HINT
+from smllib.builder import CTX_HINT, create_context
 from smllib.crc import get_crc
 from smllib.errors import CrcError
 from smllib.sml_frame import SmlFrame

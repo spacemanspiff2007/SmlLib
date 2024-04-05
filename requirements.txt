@@ -1,2 +1,11 @@
-pytest == 7.4.2
-pre-commit == 3.5.0
+# Testing
+pytest == 8.1.1
+
+# Linter
+ruff == 0.3.4
+
+# CI
+pre-commit == 3.7.0
+
+# Requirements.txt updater
+pur == 7.3.1

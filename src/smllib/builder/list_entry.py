@@ -15,7 +15,8 @@ class SmlListEntryBuilder(SmlObjBuilder[SmlListEntry]):
 
         value = ret.value
         if value is None:
-            raise ValueError('value is required!')
+            msg = 'value is required!'
+            raise ValueError(msg)
 
         # Maybe it's ascii so we try to decode it
         if isinstance(value, str):

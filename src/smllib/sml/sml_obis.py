@@ -1,4 +1,6 @@
 class ObisCode(str):
+    __slots__ = ('obis_code', 'obis_short')
+
     def __init__(self, obis_hex: str):
         _a = int(obis_hex[0:2], 16)
         _b = int(obis_hex[2:4], 16)
@@ -10,12 +12,12 @@ class ObisCode(str):
         self.obis_short = f'{_c}.{_d}.{_e}'
 
     def __new__(cls, obis_hex: str):
-        obj = str.__new__(cls, obis_hex)
-        return obj
+        return str.__new__(cls, obis_hex)
 
 
 def build_obis(_in) -> ObisCode:
     if not isinstance(_in, str) or len(_in) != 12:
-        raise ValueError(f'Obis code must be a 12 char hex str (is "{_in}" {type(_in)})!')
+        msg = f'Obis code must be a 12 char hex str (is "{_in}" {type(_in)})!'
+        raise ValueError(msg)
 
     return ObisCode(_in)

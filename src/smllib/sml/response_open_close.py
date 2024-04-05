@@ -1,12 +1,12 @@
-from typing import Dict, Optional
+from typing import ClassVar, Dict, Optional
 
 from smllib.sml import SmlBaseObj, SmlObjFieldInfo
 
-from .sml_time import build_time, TIME_HINT
+from .sml_time import TIME_HINT, build_time
 
 
 class SmlOpenResponse(SmlBaseObj):
-    __sml__: Dict[str, SmlObjFieldInfo] = {
+    __sml__: ClassVar[Dict[str, SmlObjFieldInfo]] = {
         'ref_time': SmlObjFieldInfo(func=build_time)
     }
 
@@ -19,6 +19,6 @@ class SmlOpenResponse(SmlBaseObj):
 
 
 class SmlCloseResponse(SmlBaseObj):
-    __sml__: Dict[str, SmlObjFieldInfo] = {}
+    __sml__: ClassVar[Dict[str, SmlObjFieldInfo]] = {}
 
     global_signature: Optional[str]

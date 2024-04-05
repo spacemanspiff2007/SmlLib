@@ -1,7 +1,7 @@
 from typing import Dict, Generic, Type, TypeVar
 
 from smllib.errors import WrongArgCount, WrongValueType
-from smllib.sml import inspect_obj, SmlBaseObj, SmlObjFieldInfo, T_SML_OBJ
+from smllib.sml import T_SML_OBJ, SmlBaseObj, SmlObjFieldInfo, inspect_obj
 from smllib.sml_frame_snippet import SmlFrameSnippet
 
 
@@ -37,7 +37,8 @@ class SmlObjBuilder(Generic[T_SML_OBJ]):
                 value = tuple([cls_builder.build(v, classes) for v in value])
             else:
                 if not isinstance(value, field.type):
-                    raise WrongValueType(f'{value} ({type(value)}) != {field.type}')
+                    msg = f'{value} ({type(value)}) != {field.type}'
+                    raise WrongValueType(msg)
 
             setattr(out, name, value)
         return out

@@ -1,12 +1,12 @@
 import typing
 from pathlib import Path
 
-import setuptools  # type: ignore
+import setuptools
 
 
 def load_version() -> str:
     version: typing.Dict[str, str] = {}
-    with open("src/smllib/__version__.py") as fp:
+    with (Path(__file__).parent / "src/smllib/__version__.py").open() as fp:
         exec(fp.read(), version)
     assert version['__version__'], version
     return version['__version__']

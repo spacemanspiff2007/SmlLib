@@ -3,6 +3,7 @@ from typing import Optional, Type, TypeVar, Union
 from smllib.errors import WrongValueType
 from smllib.sml.sml_eom import CEndOfSmlMsg
 
+
 SNIP_TYPE = TypeVar('SNIP_TYPE', bound=object)
 
 
@@ -15,7 +16,8 @@ class SmlFrameSnippet:
         msg = None
         if stop is not None:
             if buf is None:
-                raise ValueError('Arg stop und buf must be used together')
+                err_msg = 'Arg stop und buf must be used together'
+                raise ValueError(err_msg)
             msg = buf[start: stop]
 
         self.value = value
@@ -30,5 +32,6 @@ class SmlFrameSnippet:
     def get_value(self, val_type: Type[SNIP_TYPE]) -> SNIP_TYPE:
         value = self.value
         if not isinstance(value, val_type):
-            raise WrongValueType(f'Expected type {val_type.__name__} but got type {type(value).__name__}')
+            msg = f'Expected type {val_type.__name__} but got type {type(value).__name__}'
+            raise WrongValueType(msg)
         return value

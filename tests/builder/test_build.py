@@ -1,7 +1,13 @@
-from smllib.builder import SmlCloseResponseBuilder, SmlGetListResponseBuilder, \
-    SmlListEntryBuilder, SmlMessageBuilder, SmlObjBuilder
-from smllib.sml import EndOfSmlMsg, SmlCloseResponse, SmlListEntry
 from tests.helper import in_snip
+
+from smllib.builder import (
+    SmlCloseResponseBuilder,
+    SmlGetListResponseBuilder,
+    SmlListEntryBuilder,
+    SmlMessageBuilder,
+    SmlObjBuilder,
+)
+from smllib.sml import EndOfSmlMsg, SmlCloseResponse, SmlListEntry
 
 
 def test_build_entry():

@@ -1,12 +1,12 @@
-from typing import Dict, Optional, Tuple
+from typing import ClassVar, Dict, Optional, Tuple
 
 from smllib.sml import SmlBaseObj, SmlListEntry, SmlObjFieldInfo
 
-from .sml_time import build_time, TIME_HINT
+from .sml_time import TIME_HINT, build_time
 
 
 class SmlGetListResponse(SmlBaseObj):
-    __sml__: Dict[str, SmlObjFieldInfo] = {
+    __sml__: ClassVar[Dict[str, SmlObjFieldInfo]] = {
         'act_sensor_time': SmlObjFieldInfo(func=build_time),
         'act_gateway_time': SmlObjFieldInfo(func=build_time),
     }

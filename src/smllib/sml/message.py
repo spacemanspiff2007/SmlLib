@@ -1,6 +1,7 @@
-from typing import Dict, Type, Union
+from typing import ClassVar, Dict, Type, Union
 
 from smllib.sml import SmlBaseObj, SmlChoice, SmlCloseResponse, SmlGetListResponse, SmlObjFieldInfo, SmlOpenResponse
+
 
 MSG_TYPES: Dict[int, Type[SmlBaseObj]] = {
     # 0x0100: 'SmlOpenRequest',
@@ -22,7 +23,7 @@ MSG_TYPES: Dict[int, Type[SmlBaseObj]] = {
 
 
 class SmlMessage(SmlBaseObj):
-    __sml__: Dict[str, SmlObjFieldInfo] = {
+    __sml__: ClassVar[Dict[str, SmlObjFieldInfo]] = {
         'message_body': SmlObjFieldInfo(choice=SmlChoice(MSG_TYPES))
     }
 

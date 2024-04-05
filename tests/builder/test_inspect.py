@@ -1,9 +1,16 @@
 from datetime import datetime
 
-from smllib.sml import inspect_obj, SmlChoice, SmlCloseResponse, \
-    SmlGetListResponse, SmlListEntry, SmlObjFieldInfo, SmlOpenResponse
+from smllib.sml import (
+    SmlChoice,
+    SmlCloseResponse,
+    SmlGetListResponse,
+    SmlListEntry,
+    SmlObjFieldInfo,
+    SmlOpenResponse,
+    inspect_obj,
+)
 from smllib.sml.message import MSG_TYPES, SmlMessage
-from smllib.sml.sml_obis import build_obis, ObisCode
+from smllib.sml.sml_obis import ObisCode, build_obis
 from smllib.sml.sml_time import build_time
 
 

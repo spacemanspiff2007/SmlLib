@@ -1,6 +1,6 @@
 from typing import List, Optional
 
-from smllib.builder import create_context, CTX_HINT
+from smllib.builder import CTX_HINT, create_context
 from smllib.errors import InvalidBufferPos
 from smllib.sml import EndOfSmlMsg, SmlListEntry, SmlMessage
 from smllib.sml_frame_snippet import SmlFrameSnippet
@@ -24,7 +24,8 @@ class SmlFrame:
 
         # check start pos
         if pos >= self.buf_len:
-            raise InvalidBufferPos(f'Start pos bigger than buffer: {pos} > {self.buf_len}')
+            msg = f'Start pos bigger than buffer: {pos} > {self.buf_len}'
+            raise InvalidBufferPos(msg)
 
         # advance
         v = self.buffer[pos]
@@ -69,7 +70,8 @@ class SmlFrame:
         # End position
         end = pos + _size
         if end > self.buf_len:
-            raise InvalidBufferPos(f'Pos bigger than buffer: {end} > {self.buf_len}')
+            msg = f'Pos bigger than buffer: {end} > {self.buf_len}'
+            raise InvalidBufferPos(msg)
         self.next_pos = end
 
         # 0x50: signed integer, 0x60 unsigned integer
@@ -83,18 +85,20 @@ class SmlFrame:
         if _type == 0x00:
             return SmlFrameSnippet(self.buffer[start:end].hex(), snip_start, end, self.buffer)
 
-        raise ValueError(f'Unknown data type: {_type:02x}!')
+        msg = f'Unknown data type: {_type:02x}!'
+        raise ValueError(msg)
 
     def parse_frame(self) -> List[SmlMessage]:
         ret = []
         self.next_pos = 0
         while self.next_pos < self.buf_len:
 
-            if not self.buffer[self.next_pos] == 0x76:
-                raise ValueError(
+            if self.buffer[self.next_pos] != 0x76:
+                msg = (
                     f'No start of SML Message found at {self.next_pos}: 0x{self.buffer[self.next_pos]:x}\n'
                     f'{self.buffer.hex()}'
                 )
+                raise ValueError(msg)
 
             # This will always return a list
             val = self._parse_msg(self.get_value())

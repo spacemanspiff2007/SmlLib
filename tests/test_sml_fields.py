@@ -1,6 +1,6 @@
 from binascii import a2b_hex
 
-from smllib.builder import create_context, SmlListEntryBuilder
+from smllib.builder import SmlListEntryBuilder, create_context
 from smllib.sml_frame import SmlFrame
 
 
