@@ -41,8 +41,15 @@ def test_signature_crc_funcs(name: str) -> None:
 
 
 def test_type_hint_reader() -> None:
-    signature = _get_signature()
+    # Literal
+    available = [n for n in dir(crc_module) if not n.startswith('_')]
+    hint = typing.get_type_hints(SmlStreamReader.__init__)
+    literal = hint['crc']
+    literal_values = typing.get_args(literal)
+    assert set(available) == set(literal_values)
 
+    # crc_func variable
+    signature = _get_signature()
     a = SmlStreamReader()
     hint = typing.get_type_hints(a.crc_func)
     assert hint.pop('return') is signature.return_annotation
@@ -51,12 +58,6 @@ def test_type_hint_reader() -> None:
     for name in hint:
         assert hint[name] == signature.parameters[name].annotation
 
-    # Literal
-    available = [n for n in dir(crc_module) if not n.startswith('_')]
-    hint = typing.get_type_hints(SmlStreamReader.__init__)
-    literal = hint['crc']
-    literal_values = typing.get_args(literal)
-    assert set(available) == set(literal_values)
 
 
 def test_invalid_crc_name() -> None:
