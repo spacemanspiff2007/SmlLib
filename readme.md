@@ -149,6 +149,8 @@ SmlMessage
 ```
 
 
+## Different CRC functions
+
 Some meters e.g. the Holley DTZ541 via RS485 require a different crc function.
 You can set the crc function when creating the StreamReader.
 
