@@ -12,8 +12,13 @@ class SmlStreamReader:
     def __init__(self, build_ctx: Optional[CTX_HINT] = None, crc: Literal['kermit', 'x25'] = 'x25') -> None:
         self.bytes: bytes = b''
         self.build_ctx: CTX_HINT = build_ctx if build_ctx is not None else create_context()
-        self.crc_func: Callable[[Union[memoryview, bytes]], int] = {
-            'x25': crc_module.x25.get_crc, 'kermit': crc_module.kermit.get_crc}[crc]
+
+        # This makes it easy to patch additional crc functions to the module
+        try:
+            self.crc_func: Callable[[Union[memoryview, bytes]], int] = getattr(crc_module, crc).get_crc
+        except AttributeError:
+            available = [f'"{n:s}"' for n in dir(crc_module) if not n.startswith('_')]
+            raise ValueError(f'Unsupported CRC "{crc}"! Available: {", ".join(available):s}')
 
     def add(self, _bytes: bytes) -> None:
         self.bytes += _bytes
