@@ -51,6 +51,13 @@ def test_type_hint_reader() -> None:
     for name in hint:
         assert hint[name] == signature.parameters[name].annotation
 
+    # Literal
+    available = [n for n in dir(crc_module) if not n.startswith('_')]
+    hint = typing.get_type_hints(SmlStreamReader.__init__)
+    literal = hint['crc']
+    literal_values = typing.get_args(literal)
+    assert set(available) == set(literal_values)
+
 
 def test_invalid_crc_name() -> None:
 
