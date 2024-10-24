@@ -1,7 +1,7 @@
-from typing import Optional
+from typing import Callable, Literal, Optional, Union
 
+import smllib.crc as crc_module
 from smllib.builder import CTX_HINT, create_context
-from smllib.crc import get_crc
 from smllib.errors import CrcError
 from smllib.sml_frame import SmlFrame
 
@@ -9,16 +9,18 @@ from smllib.sml_frame import SmlFrame
 class SmlStreamReader:
     MAX_SIZE = 50 * 1024
 
-    def __init__(self, build_ctx: Optional[CTX_HINT] = None):
+    def __init__(self, build_ctx: Optional[CTX_HINT] = None, crc: Literal['kermit', 'x25'] = 'x25') -> None:
         self.bytes: bytes = b''
         self.build_ctx: CTX_HINT = build_ctx if build_ctx is not None else create_context()
+        self.crc_func: Callable[[Union[memoryview, bytes]], int] = {
+            'x25': crc_module.x25.get_crc, 'kermit': crc_module.kermit.get_crc}[crc]
 
-    def add(self, _bytes: bytes):
+    def add(self, _bytes: bytes) -> None:
         self.bytes += _bytes
         if len(self.bytes) > SmlStreamReader.MAX_SIZE:
             self.bytes = self.bytes[-1 * SmlStreamReader.MAX_SIZE:]
 
-    def clear(self):
+    def clear(self) -> None:
         self.bytes = b''
 
     def get_frame(self) -> Optional[SmlFrame]:
@@ -53,7 +55,7 @@ class SmlStreamReader:
 
         # check crc
         crc_msg = msg[-2] << 8 | msg[-1]
-        crc_calc = get_crc(msg[:-2])
+        crc_calc = self.crc_func(msg[:-2])
         if crc_msg != crc_calc:
             raise CrcError(msg, crc_msg, crc_calc)
 

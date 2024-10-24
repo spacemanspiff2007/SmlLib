@@ -147,3 +147,17 @@ SmlMessage
         global_signature: None
     crc16         : 56696
 ```
+
+
+Some meters e.g. the Holley DTZ541 via RS485 require a different crc function.
+You can set the crc function when creating the StreamReader.
+
+
+Example:
+```python
+from smllib import SmlStreamReader
+
+stream = SmlStreamReader(crc='kermit')  # <-- use kermit for Holley DTZ541
+stream.add(b'BytesFromSerialPort')
+sml_frame = stream.get_frame()
+```

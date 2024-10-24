@@ -4,7 +4,7 @@ from smllib.builder import SmlListEntryBuilder, create_context
 from smllib.sml_frame import SmlFrame
 
 
-def test_sml_fields():
+def test_sml_fields() -> None:
     f = SmlFrame(a2b_hex('77078181c78203ff010101010449534b0177070100000009ff010101010b'))
     val_list = f._parse_msg(f.get_value(0))
     o = SmlListEntryBuilder().build(val_list, create_context())
@@ -23,7 +23,7 @@ def test_sml_fields():
     assert o.get_value() == 1796587.6
 
 
-def test_val_time():
+def test_val_time() -> None:
     # Frame where time is None
     f = SmlFrame(a2b_hex('77070100600100ff010101010b0a01484c5902000424a001'))
     val_list = f._parse_msg(f.get_value(0))

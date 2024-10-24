@@ -2,7 +2,30 @@ from binascii import a2b_hex
 
 import pytest
 
+from smllib.errors import InvalidBufferPos
 from smllib.reader import SmlFrame, SmlStreamReader
+
+
+def process_frame(frame: SmlFrame, get_obis_fails: bool = True):
+    assert isinstance(frame, SmlFrame)
+
+    # ensure that parsing always works
+    for _ in range(3):
+        sml_messages = frame.parse_frame()
+        assert len(sml_messages) >= 3, sml_messages
+        for msg in sml_messages:
+            msg.format_msg()
+
+        try:
+            obis_values = frame.get_obis()
+        except InvalidBufferPos:
+            if not get_obis_fails:
+                raise
+            continue
+        else:
+            assert len(obis_values) >= 4, obis_values
+            for obis in obis_values:
+                obis.get_value()
 
 
 @pytest.mark.parametrize(
@@ -48,48 +71,61 @@ from smllib.reader import SmlFrame, SmlStreamReader
             b'019EBD01010163F08A007605011FBC8562006200726500000201710163E38F000000001B1B1B1B1A0336DB',
             id='Frame Issue #8 (ERR)'
         ),
-        pytest.param(
-            b'1B1B1B1B010101017605011FBC8362006200726500000101760101070000000000000B00000000000000000000010163F8F6007'
-            b'605011FBC846200620072650000070177010B000000000000000000000172620165002FF64F7A77078181C78203FF0101010104'
-            b'45425A0177070100000009FF010101010B000000000000000000000177070100010800FF6401018001621E52FB690000000AC07'
-            b'048A70177070100010801FF0101621E52FB6900000000000000000177070100010802FF0101621E52FB6900000000060FD1A001'
-            b'77070100020800FF6401018001621E52FB69000000000D19E1C00177070100100700FF0101621B52FE550001C39701770701002'
-            b'40700FF0101621B52FE5500001AC60177070100380700FF0101621B52FE5500000A1401770701004C0700FF0101621B52FE5500'
-            b'019EBD01010163F08A007605011FBC8562006200726500000201710163E38F000000001B1B1B1B1A03509F',
-            id='Frame Issue #8 (FIXED)'
-        ),
+    )
+)
+def test_frames(frame) -> None:
+    reader = SmlStreamReader()
+    reader.add(a2b_hex(frame))
+    process_frame(reader.get_frame())
+
+
+@pytest.mark.parametrize(
+    'frame', (
         #
         # This is a frame where the shortcut fails
         #
-        # pytest.param(
-        #     b'1b1b1b1b010101017605077707006200620072630101760107ffffffffffff05027d02560b0a01454d4800009f3846726201650'
-        #     b'27d082b62016312980076050777070162006200726307017707ffffffffffff0b0a01454d4800009f3846070100620affff7262'
-        #     b'0165027d082b7577070100603201010101010104454d480177070100600100ff010101010b0a01454d4800009f3846017707010'
-        #     b'0010800ff641c010472620165027d082b621e52ff6501ddf5f40177070100020800ff0172620165027d082b621e52ff6501d4dc'
-        #     b'0d0177070100100700ff0101621b520053039f01010163ec0100760507770702620062007263020171016344d5001b1b1b1b1a0'
-        #     b'08aa9',
-        #     id='Frame Issue #15 (FIXED)'
-        # ),
+        pytest.param(
+            b'1b1b1b1b010101017605077707006200620072630101760107ffffffffffff05027d02560b0a01454d4800009f3846726201650'
+            b'27d082b62016312980076050777070162006200726307017707ffffffffffff0b0a01454d4800009f3846070100620affff7262'
+            b'0165027d082b7577070100603201010101010104454d480177070100600100ff010101010b0a01454d4800009f3846017707010'
+            b'0010800ff641c010472620165027d082b621e52ff6501ddf5f40177070100020800ff0172620165027d082b621e52ff6501d4dc'
+            b'0d0177070100100700ff0101621b520053039f01010163ec0100760507770702620062007263020171016344d5001b1b1b1b1a0'
+            b'08aa9',
+            id='Frame Issue #15 (FIXED)'
+        ),
     )
 )
-def test_frames(frame):
-
+def test_frames_get_obis_fails(frame) -> None:
     reader = SmlStreamReader()
     reader.add(a2b_hex(frame))
+    process_frame(reader.get_frame(), get_obis_fails=True)
 
-    parsed_frame = reader.get_frame()
-    assert parsed_frame is not None
 
-    # ensure that parsing always works
-    for _ in range(3):
-        sml_messages = parsed_frame.parse_frame()
-        assert len(sml_messages) >= 3, sml_messages
-
-        obis_values = parsed_frame.get_obis()
-        assert len(obis_values) >= 4, obis_values
-
-        for obis in obis_values:
-            obis.get_value()
+@pytest.mark.parametrize(
+    'frame', (
+        pytest.param(
+            b'1b1b1b1b010101017604000001620062007265000001017601010700000a5758520b0a01484c5902000159bb010163547d00760'
+            b'40000026200620072650000070177010b0a01484c5902000159bb0101f10e77070100603201010101010104484c590177070100'
+            b'600100ff010101010b0a01484c5902000159bb0177070100010800ff65001c0104650a575853621e52ff65066f04ab017707010'
+            b'0020800ff65001c0104650a575853621e52ff65081cb4540177070100100700ff0101621b52005300bc0177070100200700ff01'
+            b'01622352ff6309380177070100340700ff0101622352ff6309290177070100480700ff0101622352ff63092401770701001f070'
+            b'0ff0101622152fe62450177070100330700ff0101622152fe62150177070100470700ff0101622152fe621a0177070100510701'
+            b'ff01016208520062780177070100510702ff01016208520062f00177070100510704ff010162085200630146017707010051070'
+            b'fff010162085200630129017707010051071aff01016208520063012801770701000e0700ff0101622c52ff6301f40177070100'
+            b'010800600101621e520262290177070100010800610101621e52026301650177070100010800620101621e52026305050177070'
+            b'100010800630101621e520263600d0177070100010800640101621e5202650001a5a20177070100020800600101621e52026237'
+            b'0177070100020800610101621e52026301580177070100020800620101621e52026309090177070100020800630101621e52026'
+            b'34aec0177070100020800640101621e520265000213a20177070100000200000101010109312e30322e3030370177070100605a'
+            b'02010101010105413031410177070100600500ff0101010165001c0104010101633361007604000003620062007265000002017'
+            b'10163ebf400001b1b1b1b1a017502',
+            id='Frame Issue #8 (FIXED)'
+        ),
+    )
+)
+def test_frames_kermit(frame) -> None:
+    reader = SmlStreamReader(crc='kermit')
+    reader.add(a2b_hex(frame))
+    process_frame(reader.get_frame())
 
 
 @pytest.mark.parametrize(
@@ -134,20 +170,6 @@ def test_frames(frame):
         ),
     )
 )
-def test_frame_only(data):
+def test_frame_only(data) -> None:
     frame = SmlFrame(a2b_hex(data))
-
-    # ensure that parsing always works
-    for _ in range(3):
-        sml_messages = frame.parse_frame()
-        assert len(sml_messages) >= 3, sml_messages
-        for msg in sml_messages:
-            msg.format_msg()
-
-        obis_values = frame.get_obis()
-        assert len(obis_values) >= 4, obis_values
-
-        for obis in obis_values:
-            print(obis.format_msg())
-            obis.get_value()
-        break
+    process_frame(frame)

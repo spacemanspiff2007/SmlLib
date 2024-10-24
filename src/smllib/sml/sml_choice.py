@@ -6,7 +6,7 @@ from smllib.sml_frame_snippet import SmlFrameSnippet
 
 
 class SmlChoice(Generic[T_SML_OBJ]):
-    def __init__(self, choices: Mapping[int, Type[T_SML_OBJ]]):
+    def __init__(self, choices: Mapping[int, Type[T_SML_OBJ]]) -> None:
         self.choices: Final = choices
 
     def get(self, obj: List[SmlFrameSnippet]) -> Tuple[Type[T_SML_OBJ], SmlFrameSnippet]:

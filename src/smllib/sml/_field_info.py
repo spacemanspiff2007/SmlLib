@@ -5,7 +5,7 @@ from smllib.sml import SmlBaseObj, SmlChoice
 
 class SmlObjFieldInfo:
     def __init__(self, func: Optional[Callable[[Any], Any]] = None, type=None,
-                 choice: Optional[SmlChoice] = None, is_container=False):
+                 choice: Optional[SmlChoice] = None, is_container=False) -> None:
         self.func: Final = func
         self.choice: Final = choice
         self.type = type
@@ -18,7 +18,7 @@ class SmlObjFieldInfo:
     def copy(self) -> 'SmlObjFieldInfo':
         return self.__class__(func=self.func, type=self.type, choice=self.choice, is_container=self.is_container)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         c = []
         if self.func is not None:
             c.append(f'func={self.func.__name__}')

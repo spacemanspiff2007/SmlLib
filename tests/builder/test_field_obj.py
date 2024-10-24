@@ -1,8 +1,8 @@
 from smllib.sml import SmlObjFieldInfo
 
 
-def test_copy():
-    def func(a):
+def test_copy() -> None:
+    def func(a) -> None:
         pass
 
     a = SmlObjFieldInfo(func)
