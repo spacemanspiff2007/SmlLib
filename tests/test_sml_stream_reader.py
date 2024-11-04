@@ -5,14 +5,14 @@ import pytest
 from smllib.reader import CrcError, SmlStreamReader
 
 
-def test_strip_start():
+def test_strip_start() -> None:
     r = SmlStreamReader()
     r.add(b'asdfasdfasdf\x1B\x1B\x1B\x1B\x01\x01\x01\x01')
     assert r.get_frame() is None
     assert r.bytes == b'\x1B\x1B\x1B\x1B\x01\x01\x01\x01'
 
 
-def test_skip_escape():
+def test_skip_escape() -> None:
     r = SmlStreamReader()
     msg = b'\x1B\x1B\x1B\x1B\x01\x01\x01\x01\x1B\x1B\x1B\x1B\x1B\x1B\x1B\x1B\x1A\x00\x00\x00'
     r.add(msg)
@@ -20,7 +20,7 @@ def test_skip_escape():
     assert r.bytes == msg
 
 
-def test_exception():
+def test_exception() -> None:
     r = SmlStreamReader()
     msg = b'\x1B\x1B\x1B\x1B\x01\x01\x01\x01\x1B\x1B\x1B\x1B\x1A\x00\x00\x00'
     r.add(msg)
@@ -29,7 +29,7 @@ def test_exception():
     assert repr(e.value) == '<CrcError msg: 0000 calc: c6e5>'
 
 
-def test_msg_long_list():
+def test_msg_long_list() -> None:
     msg2 = binascii.a2b_hex(
         '1b1b1b1b01010101'
         '76040000016200620072650000010176010107000002dba23c0b0a01484c5902000424a0010163945b00'

@@ -2,7 +2,7 @@
 [![Tests Status](https://github.com/spacemanspiff2007/SmlLib/workflows/Tests/badge.svg)](https://github.com/spacemanspiff2007/SmlLib/actions?query=workflow%3ATests)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/SmlLib)](https://pypi.org/project/smllib/)
 [![PyPI](https://img.shields.io/pypi/v/SmlLib)](https://pypi.org/project/smllib/)
-[![Downloads](https://pepy.tech/badge/SmlLib)](https://pepy.tech/project/SmlLib)
+[![Downloads](https://static.pepy.tech/badge/SmlLib/month)](https://pepy.tech/project/SmlLib)
 
 
 _A SML (Smart Message Language) library_
@@ -146,4 +146,20 @@ SmlMessage
     message_body <SmlCloseResponse>
         global_signature: None
     crc16         : 56696
+```
+
+
+## Different CRC functions
+
+Some meters e.g. the Holley DTZ541 via RS485 require a different crc function.
+You can set the crc function when creating the StreamReader.
+
+
+Example:
+```python
+from smllib import SmlStreamReader
+
+stream = SmlStreamReader(crc='kermit')  # <-- use kermit for Holley DTZ541
+stream.add(b'BytesFromSerialPort')
+sml_frame = stream.get_frame()
 ```

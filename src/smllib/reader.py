@@ -1,7 +1,7 @@
-from typing import Optional
+from typing import Callable, Literal, Optional, Union
 
+import smllib.crc as crc_module
 from smllib.builder import CTX_HINT, create_context
-from smllib.crc import get_crc
 from smllib.errors import CrcError
 from smllib.sml_frame import SmlFrame
 
@@ -9,16 +9,23 @@ from smllib.sml_frame import SmlFrame
 class SmlStreamReader:
     MAX_SIZE = 50 * 1024
 
-    def __init__(self, build_ctx: Optional[CTX_HINT] = None):
+    def __init__(self, build_ctx: Optional[CTX_HINT] = None, crc: Literal['kermit', 'x25'] = 'x25') -> None:
         self.bytes: bytes = b''
         self.build_ctx: CTX_HINT = build_ctx if build_ctx is not None else create_context()
 
-    def add(self, _bytes: bytes):
+        # This makes it easy to patch additional crc functions to the module
+        try:
+            self.crc_func: Callable[[Union[memoryview, bytes]], int] = getattr(crc_module, crc).get_crc
+        except AttributeError:
+            available = [f'"{n:s}"' for n in dir(crc_module) if not n.startswith('_')]
+            raise ValueError(f'Unsupported CRC "{crc}"! Available: {", ".join(available):s}')
+
+    def add(self, _bytes: bytes) -> None:
         self.bytes += _bytes
         if len(self.bytes) > SmlStreamReader.MAX_SIZE:
             self.bytes = self.bytes[-1 * SmlStreamReader.MAX_SIZE:]
 
-    def clear(self):
+    def clear(self) -> None:
         self.bytes = b''
 
     def get_frame(self) -> Optional[SmlFrame]:
@@ -53,7 +60,7 @@ class SmlStreamReader:
 
         # check crc
         crc_msg = msg[-2] << 8 | msg[-1]
-        crc_calc = get_crc(msg[:-2])
+        crc_calc = self.crc_func(msg[:-2])
         if crc_msg != crc_calc:
             raise CrcError(msg, crc_msg, crc_calc)
 

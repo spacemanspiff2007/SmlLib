@@ -22,7 +22,7 @@ class SmlListEntry(SmlBaseObj):
     value: Union[None, str, int, float]
     value_signature: Optional[str]
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         r = []
         for k, v in self.__dict__.items():
             if v is not None:
@@ -42,7 +42,7 @@ class SmlListEntry(SmlBaseObj):
             val = self.get_value()
             u = UNITS.get(self.unit)
             if u is None:
-                u = f" ?:{self.unit}"
+                u = f' ?:{self.unit}'
             summary += f'{val}{u}'
 
         desc = OBIS_NAMES.get(self.obis)

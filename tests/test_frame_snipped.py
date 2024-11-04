@@ -4,7 +4,7 @@ from smllib.errors import WrongValueType
 from smllib.sml_frame_snippet import SmlFrameSnippet
 
 
-def test_snippet_type():
+def test_snippet_type() -> None:
     s = SmlFrameSnippet(8, 0)
 
     with pytest.raises(WrongValueType) as e:

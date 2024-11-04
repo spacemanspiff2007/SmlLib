@@ -9,7 +9,7 @@ from smllib.builder import (
 from smllib.sml import SmlListEntry
 
 
-def test_open_response():
+def test_open_response() -> None:
     r = SmlOpenResponseBuilder().build(in_snip([None, None, 'ab', 'cd', None, 1]), {})
     assert r.format_msg() == (
         '<SmlOpenResponse>\n'
@@ -22,7 +22,7 @@ def test_open_response():
     )
 
 
-def test_close_response():
+def test_close_response() -> None:
     r = SmlCloseResponseBuilder().build(in_snip(['my_sig']), {})
     assert r.format_msg() == (
         '<SmlCloseResponse>\n'
@@ -30,7 +30,7 @@ def test_close_response():
     )
 
 
-def test_list_entry():
+def test_list_entry() -> None:
     data = in_snip([
         None, 'server', None, None,
         [['0100010800ff', None, None, None, None, '76616c31', None],

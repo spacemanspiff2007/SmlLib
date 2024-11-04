@@ -6,12 +6,12 @@ class SmlLibException(Exception):
 
 
 class CrcError(SmlLibException):
-    def __init__(self, msg: bytes, crc_msg: int, crc_calc: int):
+    def __init__(self, msg: bytes, crc_msg: int, crc_calc: int) -> None:
         self.msg = msg
         self.crc_msg = crc_msg
         self.crc_calc = crc_calc
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'<{self.__class__.__name__} msg: {self.crc_msg:04x} calc: {self.crc_calc:04x}>'
 
 

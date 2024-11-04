@@ -8,7 +8,7 @@ from smllib.sml_frame_snippet import SmlFrameSnippet
 class SmlObjBuilder(Generic[T_SML_OBJ]):
     BUILDS: Type[T_SML_OBJ]
 
-    def __init__(self):
+    def __init__(self) -> None:
         assert issubclass(self.BUILDS, SmlBaseObj), self.BUILDS
         self.fields: Dict[str, SmlObjFieldInfo] = inspect_obj(self.BUILDS)
 

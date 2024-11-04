@@ -10,14 +10,14 @@ from smllib.builder import (
 from smllib.sml import EndOfSmlMsg, SmlCloseResponse, SmlListEntry
 
 
-def test_build_entry():
+def test_build_entry() -> None:
     builder = SmlListEntryBuilder()
     obj = builder.build(in_snip(['0100010800ff', None, None, None, None, '76616c', None]), {SmlListEntry: builder})
     assert obj.obis == '0100010800ff'
     assert obj.value == 'val'
 
 
-def test_build_entry_list():
+def test_build_entry_list() -> None:
     data = in_snip([
         None, 'server', None, None,
         [['0100010800ff', None, None, None, None, '76616c31', None],
@@ -50,7 +50,7 @@ def test_build_entry_list():
     assert obj.val_list[1].value == 'val2'
 
 
-def test_build_choice():
+def test_build_choice() -> None:
     data = in_snip(['t1', 1, 0, [0x0201, ['sig']], 1111, EndOfSmlMsg])
     builder = SmlMessageBuilder()
     obj = builder.build(data, {SmlCloseResponse: SmlCloseResponseBuilder()})

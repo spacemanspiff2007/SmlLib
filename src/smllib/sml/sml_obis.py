@@ -1,7 +1,7 @@
 class ObisCode(str):
     __slots__ = ('obis_code', 'obis_short')
 
-    def __init__(self, obis_hex: str):
+    def __init__(self, obis_hex: str) -> None:
         _a = int(obis_hex[0:2], 16)
         _b = int(obis_hex[2:4], 16)
         _c = int(obis_hex[4:6], 16)

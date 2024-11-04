@@ -11,7 +11,7 @@ class SmlFrameSnippet:
     __slots__ = ('pos', 'value', 'msg')
 
     def __init__(self, value: Union[None, bool, int, str, float, list, CEndOfSmlMsg], start: int,
-                 stop: Optional[int] = None, buf: Optional[memoryview] = None):
+                 stop: Optional[int] = None, buf: Optional[memoryview] = None) -> None:
 
         msg = None
         if stop is not None:
