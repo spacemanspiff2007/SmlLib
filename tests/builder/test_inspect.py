@@ -12,6 +12,7 @@ from smllib.sml import (
 from smllib.sml.message import MSG_TYPES, SmlMessage
 from smllib.sml.sml_obis import ObisCode, build_obis
 from smllib.sml.sml_time import build_time
+from smllib.sml.sml_value import build_sml_value
 
 
 def test_inspect_sml_message() -> None:
@@ -33,5 +34,5 @@ def test_inspect_sml_list_entry() -> None:
     assert fields['val_time'] == SmlObjFieldInfo(type=(type(None), int, datetime), func=build_time)
     assert fields['unit'] == SmlObjFieldInfo(type=(int, type(None)))
     assert fields['scaler'] == SmlObjFieldInfo(type=(int, type(None)))
-    assert fields['value'] == SmlObjFieldInfo(type=(type(None), str, int, float))
+    assert fields['value'] == SmlObjFieldInfo(type=(type(None), str, int, float, datetime), func=build_sml_value)
     assert fields['value_signature'] == SmlObjFieldInfo(type=(str, type(None)))

@@ -6,7 +6,7 @@ from smllib.errors import InvalidBufferPos
 from smllib.reader import SmlFrame, SmlStreamReader
 
 
-def process_frame(frame: SmlFrame, get_obis_fails: bool = True):
+def process_frame(frame: SmlFrame, expected_obis_len: int, get_obis_fails: bool = True):
     assert isinstance(frame, SmlFrame)
 
     # ensure that parsing always works
@@ -23,19 +23,20 @@ def process_frame(frame: SmlFrame, get_obis_fails: bool = True):
                 raise
             continue
         else:
-            assert len(obis_values) >= 4, obis_values
+            assert len(obis_values) == expected_obis_len, obis_values
             for obis in obis_values:
                 obis.get_value()
 
 
 @pytest.mark.parametrize(
-    'frame', (
+    'frame,expected_obis_len', (
         pytest.param(
             b'1b1b1b1b0101010176051c414c02620062007263010176010102310b0a01445a47000282c0b07262016505471c2a620263f9380'
             b'076051d414c02620062007263070177010b0a01445a47000282c0b0070100620affff7262016505471c2a747707010060320101'
             b'0172620162006200520004445a470177070100600100ff017262016200620052000b0a01445a47000282c0b0017707010001080'
             b'0ff641c01047262016200621e520363344f0177070100020800ff017262016200621e520362000101016393770076051e414c02'
             b'6200620072630201710163e6ba00000000001b1b1b1b1a04dad0',
+            4,
             id='Frame1'
         ),
         pytest.param(
@@ -49,6 +50,7 @@ def process_frame(frame: SmlFrame, get_obis_fails: bool = True):
             b'162085200630138017707010051071aff01016208520063011101770701000e0700ff0101622c52ff6301f40177070100000200'
             b'000101010109312e30322e3030370177070100605a02010101010105413031410177070100600500ff0101010165001c8104010'
             b'10163fc1e00760400000362006200726500000201710163e8230000001b1b1b1b1a0222ed',
+            20,
             id='Frame2'
         ),
         pytest.param(
@@ -59,6 +61,7 @@ def process_frame(frame: SmlFrame, get_obis_fails: bool = True):
             b'77070100020800FF6401018001621E52FB69000000000D19E1C00177070100100700FF0101621B52FE55000089D901770701002'
             b'40700FF0101621B52FE55000020220177070100380700FF0101621B52FE5500000A9201770701004C0700FF0101621B52FE5500'
             b'005F2501010163810200760501188E636200620072650000020171016325FC000000001B1B1B1B1A0356F5',
+            9,
             id='Frame Issue #8 (OK)'
         ),
         pytest.param(
@@ -69,18 +72,29 @@ def process_frame(frame: SmlFrame, get_obis_fails: bool = True):
             b'77070100020800FF6401018001621E52FB69000000000D19E1C00177070100100700FF0101621B52FE550001C39701770701002'
             b'40700FF0101621B52FE5500001AC60177070100380700FF0101621B52FE5500000A1401770701004C0700FF0101621B52FE5500'
             b'019EBD01010163F08A007605011FBC8562006200726500000201710163E38F000000001B1B1B1B1A0336DB',
+            9,
             id='Frame Issue #8 (ERR)'
         ),
+        pytest.param(
+            b'1b1b1b1b010101017605c4acc7c062006200726301017601054562656505d2b35e770b0901454d480000cacf7e010163fa590076'
+            b'05c4acc7bf620062007263070177010b0901454d480000cacf7e078180817103ff72620165001e3f7d7477078182815401ff0172'
+            b'62037365671b632253003c53003c010105422ccd8c0177070100011100ff640000087262037365671b632353003c53003c621e52'
+            b'ff560000009e3c0177078100600800010101010172620172620165001e3f500177078180817101ff01010101650000000f018304'
+            b'c36d58a17f56377bc23212f85bd600d8ee69776b77beeb3d53b88037ac44f96465f8a2beffda63450d97c2ede9c8a1dd00030163'
+            b'b127007605c4acc7c162006200726302017101637a1700001b1b1b1b1a01d863',
+            1,
+            id='Frame Issue #26'
+        )
     )
 )
-def test_frames(frame) -> None:
+def test_frames(frame, expected_obis_len) -> None:
     reader = SmlStreamReader()
     reader.add(a2b_hex(frame))
-    process_frame(reader.get_frame())
+    process_frame(reader.get_frame(), expected_obis_len)
 
 
 @pytest.mark.parametrize(
-    'frame', (
+    'frame,expected_obis_len', (
         #
         # This is a frame where the shortcut fails
         #
@@ -91,18 +105,19 @@ def test_frames(frame) -> None:
             b'0010800ff641c010472620165027d082b621e52ff6501ddf5f40177070100020800ff0172620165027d082b621e52ff6501d4dc'
             b'0d0177070100100700ff0101621b520053039f01010163ec0100760507770702620062007263020171016344d5001b1b1b1b1a0'
             b'08aa9',
+            6,
             id='Frame Issue #15 (FIXED)'
         ),
     )
 )
-def test_frames_get_obis_fails(frame) -> None:
+def test_frames_get_obis_fails(frame, expected_obis_len) -> None:
     reader = SmlStreamReader()
     reader.add(a2b_hex(frame))
-    process_frame(reader.get_frame(), get_obis_fails=True)
+    process_frame(reader.get_frame(), expected_obis_len, get_obis_fails=True)
 
 
 @pytest.mark.parametrize(
-    'frame', (
+    'frame,expected_obis_len', (
         pytest.param(
             b'1b1b1b1b010101017604000001620062007265000001017601010700000a5758520b0a01484c5902000159bb010163547d00760'
             b'40000026200620072650000070177010b0a01484c5902000159bb0101f10e77070100603201010101010104484c590177070100'
@@ -118,18 +133,19 @@ def test_frames_get_obis_fails(frame) -> None:
             b'34aec0177070100020800640101621e520265000213a20177070100000200000101010109312e30322e3030370177070100605a'
             b'02010101010105413031410177070100600500ff0101010165001c0104010101633361007604000003620062007265000002017'
             b'10163ebf400001b1b1b1b1a017502',
+            30,
             id='Frame Issue #8 (FIXED)'
         ),
     )
 )
-def test_frames_kermit(frame) -> None:
+def test_frames_kermit(frame, expected_obis_len) -> None:
     reader = SmlStreamReader(crc='kermit')
     reader.add(a2b_hex(frame))
-    process_frame(reader.get_frame())
+    process_frame(reader.get_frame(), expected_obis_len)
 
 
 @pytest.mark.parametrize(
-    'data', (
+    'data,expected_obis_len', (
         pytest.param(
             b'760505b6436862006200726301017601010501e76bce0b090149534b0004812d55010163696c00760505b643696200620072630'
             b'70177010b090149534b0004812d55070100620affff72620165028654d27a77078181c78203ff010101010449534b0177070100'
@@ -139,6 +155,7 @@ def test_frames_kermit(frame) -> None:
             b'21e52ff5900000000000000000177070100100700ff0101621b520055000000c40177078181c78205ff01010101830255ee18e3'
             b'85e7aa763de1b81508f198e40e495f1ef707f779be518456b0f293674b06d0ea4060f11f2b6f6fb5d1c7ae620101016396c6007'
             b'60505b6436a6200620072630201710163fd4900',
+            8,
             id='Frame1'
         ),
         pytest.param(
@@ -150,6 +167,7 @@ def test_frames_kermit(frame) -> None:
             b'0177070100100700ff0101621b52ff55fffff9140177078181c78205ff017262016510e46088010183026b6b6b6bb6b66b6b6b6b'
             b'09910a958432f7c76ef11e1ba5d13d047051d5b189e1263e62d73058e3f03e219b24804ecac4010101632538007607000e1ef6d8'
             b'2e62006200726302017101639eda00',
+            8,
             id='Frame2'
         ),
         pytest.param(
@@ -158,6 +176,7 @@ def test_frames_kermit(frame) -> None:
             b'534b0177070100600100ff010101010b0a0149534b0005020de20177070100010800ff65001c010401621e52ff6500247bc10177'
             b'070100020800ff0101621e52ff62000177070100100700ff0101621b520053080d01010163fdc0007605004bf37d620062007263'
             b'020171016357f100',
+            5,
             id='Frame3'
         ),
         pytest.param(
@@ -166,10 +185,11 @@ def test_frames_kermit(frame) -> None:
             b'534b0177070100600100ff010101010b0a0149534b0005020de20177070100010800ff65001c410401621e52ff6501d3c8d80177'
             b'070100020800ff0101621e52ff650001fe010177070100100700ff0101621b52005300ad010101639e9c00760505507504620062'
             b'0072630201710163b71b00',
+            5,
             id='Frame3'
         ),
     )
 )
-def test_frame_only(data) -> None:
+def test_frame_only(data, expected_obis_len) -> None:
     frame = SmlFrame(a2b_hex(data))
-    process_frame(frame)
+    process_frame(frame, expected_obis_len)

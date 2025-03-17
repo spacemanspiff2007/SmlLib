@@ -3,6 +3,7 @@ from typing import ClassVar, Dict, Optional, Union
 from smllib.const import OBIS_NAMES, UNITS
 from smllib.sml import SmlObjFieldInfo
 from smllib.sml._base_obj import INDENT, SmlBaseObj
+from smllib.sml.sml_value import build_sml_value
 
 from .sml_obis import ObisCode, build_obis
 from .sml_time import TIME_HINT, build_time
@@ -11,7 +12,8 @@ from .sml_time import TIME_HINT, build_time
 class SmlListEntry(SmlBaseObj):
     __sml__: ClassVar[Dict[str, SmlObjFieldInfo]] = {
         'val_time': SmlObjFieldInfo(func=build_time),
-        'obis': SmlObjFieldInfo(func=build_obis)
+        'obis': SmlObjFieldInfo(func=build_obis),
+        'value': SmlObjFieldInfo(func=build_sml_value),
     }
 
     obis: ObisCode
@@ -19,7 +21,7 @@ class SmlListEntry(SmlBaseObj):
     val_time: TIME_HINT
     unit: Optional[int]
     scaler: Optional[int]
-    value: Union[None, str, int, float]
+    value: Union[None, str, int, float, TIME_HINT]
     value_signature: Optional[str]
 
     def __repr__(self) -> str:
