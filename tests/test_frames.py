@@ -1,4 +1,4 @@
-from binascii import a2b_hex, b2a_hex
+from binascii import a2b_hex
 
 import pytest
 
@@ -18,7 +18,7 @@ def process_frame(frame: SmlFrame, expected_obis_len: int, get_obis_fails: bool 
 
         for msg in sml_messages:
             obis_ids.extend(o.obis for o in getattr(msg.message_body, 'val_list', ()))
-            print(msg.format_msg())
+            msg.format_msg()
 
         assert len(obis_ids) == expected_obis_len
 
@@ -32,7 +32,8 @@ def process_frame(frame: SmlFrame, expected_obis_len: int, get_obis_fails: bool 
         for obis in obis_values:
             obis.get_value()
 
-        assert [o.obis for o in obis_values] == [o for o in obis_ids if not o.startswith('8')]
+        # get_obis() returns only values, not the other  fields like manufacturer identifikation
+        assert [o.obis for o in obis_values] == [o for o in obis_ids if not o.startswith('81')]
 
 
 @pytest.mark.parametrize(
