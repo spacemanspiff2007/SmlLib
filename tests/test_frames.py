@@ -1,8 +1,8 @@
-from binascii import a2b_hex
+from binascii import a2b_hex, b2a_hex
 
 import pytest
 
-from smllib.errors import InvalidBufferPos
+from smllib.errors import InvalidBufferPos, WrongValueType
 from smllib.reader import SmlFrame, SmlStreamReader
 
 
@@ -13,19 +13,26 @@ def process_frame(frame: SmlFrame, expected_obis_len: int, get_obis_fails: bool 
     for _ in range(3):
         sml_messages = frame.parse_frame()
         assert len(sml_messages) >= 3, sml_messages
+
+        obis_ids = []
+
         for msg in sml_messages:
-            msg.format_msg()
+            obis_ids.extend(o.obis for o in getattr(msg.message_body, 'val_list', ()))
+            print(msg.format_msg())
+
+        assert len(obis_ids) == expected_obis_len
 
         try:
             obis_values = frame.get_obis()
-        except InvalidBufferPos:
+        except (InvalidBufferPos, WrongValueType):
             if not get_obis_fails:
                 raise
             continue
-        else:
-            assert len(obis_values) == expected_obis_len, obis_values
-            for obis in obis_values:
-                obis.get_value()
+
+        for obis in obis_values:
+            obis.get_value()
+
+        assert [o.obis for o in obis_values] == [o for o in obis_ids if not o.startswith('8')]
 
 
 @pytest.mark.parametrize(
@@ -61,7 +68,7 @@ def process_frame(frame: SmlFrame, expected_obis_len: int, get_obis_fails: bool 
             b'77070100020800FF6401018001621E52FB69000000000D19E1C00177070100100700FF0101621B52FE55000089D901770701002'
             b'40700FF0101621B52FE55000020220177070100380700FF0101621B52FE5500000A9201770701004C0700FF0101621B52FE5500'
             b'005F2501010163810200760501188E636200620072650000020171016325FC000000001B1B1B1B1A0356F5',
-            9,
+            10,
             id='Frame Issue #8 (OK)'
         ),
         pytest.param(
@@ -72,7 +79,7 @@ def process_frame(frame: SmlFrame, expected_obis_len: int, get_obis_fails: bool 
             b'77070100020800FF6401018001621E52FB69000000000D19E1C00177070100100700FF0101621B52FE550001C39701770701002'
             b'40700FF0101621B52FE5500001AC60177070100380700FF0101621B52FE5500000A1401770701004C0700FF0101621B52FE5500'
             b'019EBD01010163F08A007605011FBC8562006200726500000201710163E38F000000001B1B1B1B1A0336DB',
-            9,
+            10,
             id='Frame Issue #8 (ERR)'
         ),
         pytest.param(
@@ -82,7 +89,7 @@ def process_frame(frame: SmlFrame, expected_obis_len: int, get_obis_fails: bool 
             b'ff560000009e3c0177078100600800010101010172620172620165001e3f500177078180817101ff01010101650000000f018304'
             b'c36d58a17f56377bc23212f85bd600d8ee69776b77beeb3d53b88037ac44f96465f8a2beffda63450d97c2ede9c8a1dd00030163'
             b'b127007605c4acc7c162006200726302017101637a1700001b1b1b1b1a01d863',
-            1,
+            4,
             id='Frame Issue #26'
         )
     )
@@ -105,8 +112,32 @@ def test_frames(frame, expected_obis_len) -> None:
             b'0010800ff641c010472620165027d082b621e52ff6501ddf5f40177070100020800ff0172620165027d082b621e52ff6501d4dc'
             b'0d0177070100100700ff0101621b520053039f01010163ec0100760507770702620062007263020171016344d5001b1b1b1b1a0'
             b'08aa9',
-            6,
+            5,
             id='Frame Issue #15 (FIXED)'
+        ),
+        pytest.param(
+            b'1b1b1b1b0101010176051ab73ef062006200726301017601010508e7bfa409080535342d5101770101636c520076051ab73ef16'
+            b'200620072630701770109080535342d510177070100620affff72620165177b1dd57a77078181c78203ff010101010449534b01'
+            b'77070100000009ff0101010109080535342d5101770177070100010800ff650000018201621e52ff59000000000b190a8601770'
+            b'70100010801ff0101621e52ff59000000000b190a860177070100010802ff0101621e52ff590000000000000000017707010010'
+            b'0700ff0101621b520055000000820177070100240700ff0101621b520055000000710177070100380700ff0101621b520055000'
+            b'0000501770701004c0700ff0101621b5200550000000b0177078181c78205ff010101018302671a492438f74afd2339876b2d68'
+            b'e1ae8b600b5922b18afcabd892c7dab5811ece539da803633c59b8fe19bee00c8bbb01010163a0470076051ab73ef2620062007'
+            b'263020171016350b90000001b1b1b1b1a02e01c',
+            10,
+            id='Frame Issue #28-1 (FIXED)'
+        ),
+        pytest.param(
+            b'1b1b1b1b0101010176051ab73ef062006200726301017601010508e7bfa409080535342d5101770101636c520076051ab73ef16'
+            b'200620072630701770109080535342d510177070100620affff72620165177b1dd57a77078181c78203ff010101010449534b01'
+            b'77070100000009ff0101010109080535342d5101770177070100010800ff650000018201621e52ff59000000000b190a8601770'
+            b'70100010801ff0101621e52ff59000000000b190a860177070100010802ff0101621e52ff590000000000000000017707010010'
+            b'0700ff0101621b520055000000820177070100240700ff0101621b520055000000710177070100380700ff0101621b520055000'
+            b'0000501770701004c0700ff0101621b5200550000000b0177078181c78205ff010101018302671a492438f74afd2339876b2d68'
+            b'e1ae8b600b5922b18afcabd892c7dab5811ece539da803633c59b8fe19bee00c8bbb01010163a0470076051ab73ef2620062007'
+            b'263020171016350b90000001b1b1b1b1a02e01c',
+            10,
+            id='Frame Issue #28-2 (FIXED)'
         ),
     )
 )
@@ -155,7 +186,7 @@ def test_frames_kermit(frame, expected_obis_len) -> None:
             b'21e52ff5900000000000000000177070100100700ff0101621b520055000000c40177078181c78205ff01010101830255ee18e3'
             b'85e7aa763de1b81508f198e40e495f1ef707f779be518456b0f293674b06d0ea4060f11f2b6f6fb5d1c7ae620101016396c6007'
             b'60505b6436a6200620072630201710163fd4900',
-            8,
+            10,
             id='Frame1'
         ),
         pytest.param(
@@ -167,7 +198,7 @@ def test_frames_kermit(frame, expected_obis_len) -> None:
             b'0177070100100700ff0101621b52ff55fffff9140177078181c78205ff017262016510e46088010183026b6b6b6bb6b66b6b6b6b'
             b'09910a958432f7c76ef11e1ba5d13d047051d5b189e1263e62d73058e3f03e219b24804ecac4010101632538007607000e1ef6d8'
             b'2e62006200726302017101639eda00',
-            8,
+            10,
             id='Frame2'
         ),
         pytest.param(
