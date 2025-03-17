@@ -38,7 +38,7 @@ def test_val_time() -> None:
     o = SmlListEntryBuilder().build(val_list, create_context())
     assert o.val_time == 0
 
-def test_value_sml_time():
+def test_value_sml_time() -> None:
     f = SmlFrame(a2b_hex('770781006008000101010101726201726202655FEE825D01'))
     val_list = f._parse_msg(f.get_value(0))
     o = SmlListEntryBuilder().build(val_list, create_context())

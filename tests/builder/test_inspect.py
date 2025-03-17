@@ -10,7 +10,7 @@ from smllib.sml import (
     inspect_obj,
 )
 from smllib.sml.message import MSG_TYPES, SmlMessage
-from smllib.sml.sml_obis import build_obis, ObisCode
+from smllib.sml.sml_obis import ObisCode, build_obis
 from smllib.sml.sml_time import build_time
 from smllib.sml.sml_value import build_sml_value
 
