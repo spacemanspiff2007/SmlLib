@@ -22,5 +22,5 @@ class SmlChoice(Generic[T_SML_OBJ]):
 
         return ret, _value
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         return self.choices == other.choices
