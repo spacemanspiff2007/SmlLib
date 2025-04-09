@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Union
 
 from smllib.errors import UnsupportedChoiceValue
@@ -21,9 +21,9 @@ def build_time(_in):
     if _type == 1:
         return value_s.value
     if _type == 2:
-        return datetime.utcfromtimestamp(value_s.value)
+        return datetime.fromtimestamp(value_s.value, timezone.utc)
     if _type == 3:
         ts, offset1, offset2 = value_s.value
-        return datetime.utcfromtimestamp(ts.value) + timedelta(minutes=offset1.value) + timedelta(minutes=offset2.value)
+        return datetime.fromtimestamp(ts.value, timezone(timedelta(minutes=offset1.value) + timedelta(minutes=offset2.value)))
 
     raise UnsupportedChoiceValue(_type)

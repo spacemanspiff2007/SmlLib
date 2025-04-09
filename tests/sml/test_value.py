@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
 import pytest
 from tests.helper import in_snip
@@ -10,7 +10,7 @@ from smllib.sml.sml_value import build_sml_value
 def test_sml_value() -> None:
     assert build_sml_value(None) is None
     assert build_sml_value(12) == 12
-    assert build_sml_value(in_snip([1, [2, 1609466461]], pack_top=False)) == datetime(2021, 1, 1, 2, 1, 1)
+    assert build_sml_value(in_snip([1, [2, 1609466461]], pack_top=False)) == datetime(2021, 1, 1, 2, 1, 1, tzinfo=timezone.utc)
 
 def test_sml_value_with_unsupported_choice() -> None:
     with pytest.raises(UnsupportedChoiceValue) as e:
