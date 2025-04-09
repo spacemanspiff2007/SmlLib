@@ -31,7 +31,8 @@ stream.add(b'BytesFromSerialPort')
 sml_frame = stream.get_frame()
 
 # A quick Shortcut to extract all values without parsing the whole frame
-# In rare cases this might raise an InvalidBufferPos exception, then you have to use sml_frame.parse_frame()
+# It's faster but in rare cases this might raise an exception (e.g. InvalidBufferPos).
+# In that case you have to use sml_frame.parse_frame() which is guaranteed to work
 obis_values = sml_frame.get_obis()
 
 # return all values but slower

@@ -59,7 +59,6 @@ def test_type_hint_reader() -> None:
         assert hint[name] == signature.parameters[name].annotation
 
 
-
 def test_invalid_crc_name() -> None:
 
     with pytest.raises(ValueError) as e:
