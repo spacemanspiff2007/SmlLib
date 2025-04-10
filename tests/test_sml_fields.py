@@ -1,5 +1,5 @@
 from binascii import a2b_hex
-from datetime import datetime
+from datetime import datetime, timezone
 
 from smllib.builder import SmlListEntryBuilder, create_context
 from smllib.sml_frame import SmlFrame
@@ -48,4 +48,4 @@ def test_value_sml_time() -> None:
     assert o.status is None
     assert o.unit is None
     assert o.scaler is None
-    assert o.value == datetime(2021, 1, 1, 2, 1, 1)
+    assert o.value == datetime(2021, 1, 1, 2, 1, 1, tzinfo=timezone.utc)
