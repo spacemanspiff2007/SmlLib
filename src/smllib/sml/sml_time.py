@@ -1,10 +1,10 @@
 from datetime import datetime, timedelta, timezone
-from typing import TypeAlias, Union
+from typing import Union
 
 from smllib.errors import UnsupportedChoiceValue
 
 
-TIME_HINT: TypeAlias = Union[None, int, datetime]
+TIME_HINT = Union[None, int, datetime]
 
 
 def build_time(_in) -> TIME_HINT:
