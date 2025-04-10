@@ -34,8 +34,6 @@ ignore = [
     "UP038",    # Use X | Y in {} call instead of (X, Y)
 
     # https://docs.astral.sh/ruff/rules/#flake8-annotations-ann
-    "ANN101",   # Missing type annotation for {name} in method
-    "ANN102",   # Missing type annotation for {name} in classmethod
     "ANN401",   # Dynamically typed expressions (typing.Any) are disallowed in {name}
 
     # https://docs.astral.sh/ruff/rules/#flake8-blind-except-ble
@@ -59,6 +57,9 @@ ignore = [
 
     # https://docs.astral.sh/ruff/rules/#ruff-specific-rules-ruf
     "RUF005",  # Consider {expression} instead of concatenation
+
+    # https://docs.astral.sh/ruff/rules/#flake8-pytest-style-pt
+    "PT007",  # Wrong values type in @pytest.mark.parametrize expected {values} of {row}
 ]
 
 

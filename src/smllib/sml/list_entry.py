@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import ClassVar, Dict, Optional, Union
 
 from smllib.const import OBIS_NAMES, UNITS
@@ -31,7 +32,7 @@ class SmlListEntry(SmlBaseObj):
                 r.append(f'{k}: {v}')
         return f'<{", ".join(r)}>'
 
-    def format_msg(self, indent: int = 0):
+    def format_msg(self, indent: int = 0) -> str:
         indent += 1
         r = f'<{self.__class__.__name__}>\n'
         w = max(map(len, self.__dict__), default=0)
@@ -54,7 +55,7 @@ class SmlListEntry(SmlBaseObj):
             r += f'{INDENT*indent}-> {summary:s}\n'
         return r
 
-    def get_value(self) -> Union[None, float, str]:
+    def get_value(self) -> Union[None, float, str, datetime]:
         if self.value is None:
             return None
 

@@ -7,7 +7,7 @@ from smllib.errors import UnsupportedChoiceValue
 TIME_HINT = Union[None, int, datetime]
 
 
-def build_time(_in):
+def build_time(_in) -> TIME_HINT:
     if _in is None:
         return _in
 
@@ -24,6 +24,9 @@ def build_time(_in):
         return datetime.fromtimestamp(value_s.value, timezone.utc)
     if _type == 3:
         ts, offset1, offset2 = value_s.value
-        return datetime.fromtimestamp(ts.value, timezone(timedelta(minutes=offset1.value) + timedelta(minutes=offset2.value)))
+        return datetime.fromtimestamp(
+            ts.value,
+            timezone(timedelta(minutes=offset1.value) + timedelta(minutes=offset2.value))
+        )
 
     raise UnsupportedChoiceValue(_type)
