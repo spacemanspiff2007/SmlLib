@@ -18,7 +18,8 @@ class SmlStreamReader:
             self.crc_func: Callable[[Union[memoryview, bytes]], int] = getattr(crc_module, crc).get_crc
         except AttributeError:
             available = [f'"{n:s}"' for n in dir(crc_module) if not n.startswith('_')]
-            raise ValueError(f'Unsupported CRC "{crc}"! Available: {", ".join(available):s}')
+            msg = f'Unsupported CRC "{crc}"! Available: {", ".join(available):s}'
+            raise ValueError(msg) from None
 
     def add(self, _bytes: bytes) -> None:
         self.bytes += _bytes

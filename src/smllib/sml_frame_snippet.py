@@ -25,7 +25,9 @@ class SmlFrameSnippet:
         self.msg: Optional[memoryview] = msg
 
     def stop_pos(self, pos: int, buf: memoryview) -> 'SmlFrameSnippet':
-        assert self.msg is None
+        if self.msg is not None:
+            msg = 'Message is already set'
+            raise ValueError(msg)
         self.msg = buf[self.pos: pos]
         return self
 
